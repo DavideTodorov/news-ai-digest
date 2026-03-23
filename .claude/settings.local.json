@@ -6,7 +6,10 @@
       "Bash(.venv/Scripts/python -c \"import rss_fetcher; print\\(''OK''\\)\")",
       "Bash(.venv/Scripts/python -c \":*)",
       "Read(//tmp/**)",
-      "Bash(python -c \":*)"
+      "Bash(python -c \":*)",
+      "Bash(mv Dockerfile.rss_fetcher Dockerfile_rss_fetcher)",
+      "Bash(mv Dockerfile.summariser_bnt Dockerfile_summariser_bnt)",
+      "Bash(mv Dockerfile.summariser_investor Dockerfile_summariser_investor)"
     ]
   }
 }

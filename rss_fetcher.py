@@ -4,8 +4,9 @@ import requests
 import trafilatura
 import os
 import logging
+from calendar import timegm
 from datetime import datetime, timezone
-from time import mktime, sleep
+from time import sleep
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
@@ -41,7 +42,7 @@ def strip_html(text):
 
 def parse_published(entry):
     if hasattr(entry, "published_parsed") and entry.published_parsed:
-        return datetime.fromtimestamp(mktime(entry.published_parsed), tz=timezone.utc)
+        return datetime.fromtimestamp(timegm(entry.published_parsed), tz=timezone.utc)
     return datetime.now(tz=timezone.utc)
 
 

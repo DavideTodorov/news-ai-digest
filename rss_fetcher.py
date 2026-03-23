@@ -3,12 +3,19 @@ import psycopg2
 import requests
 import trafilatura
 import os
+import logging
 from datetime import datetime, timezone
 from time import mktime, sleep
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+log = logging.getLogger(__name__)
 
 FEEDS = [
     {"name": "BNT News", "url": "https://news.bnt.bg/bg/rss/news.xml"},
@@ -22,6 +29,7 @@ def get_connection():
     url = os.getenv("DATABASE_URL")
     if not url:
         raise RuntimeError("DATABASE_URL is not set")
+    log.info(f"Connecting to DB: {url[:30]}...")
     return psycopg2.connect(url)
 
 
@@ -38,21 +46,23 @@ def parse_published(entry):
 
 
 def fetch_article_content(url):
-    """Fetch full article text. Falls back to empty string on failure."""
     try:
         r = requests.get(url, headers=HEADERS, timeout=10)
         html = r.content.decode("utf-8")
         text = trafilatura.extract(html, favor_recall=True)
         return text or ""
     except Exception as e:
-        print(f"  Could not fetch content for {url}: {e}")
+        log.warning(f"Could not fetch content for {url}: {e}")
         return ""
 
 
 def insert_article(conn, feed_name, entry):
     url = entry.get("link", "")
+    title = entry.get("title", "")
+    log.info(f"Processing: {title[:60]}")
     content = fetch_article_content(url)
     if not content:
+        log.warning(f"Falling back to RSS summary for: {url}")
         content = strip_html(entry.get("summary", ""))
     word_count = len(content.split()) if content else 0
     with conn.cursor() as cur:
@@ -65,7 +75,7 @@ def insert_article(conn, feed_name, entry):
             (
                 entry.get("id") or entry.get("guid"),
                 feed_name,
-                entry.get("title", ""),
+                title,
                 url,
                 content,
                 word_count,
@@ -75,22 +85,25 @@ def insert_article(conn, feed_name, entry):
 
 
 def fetch_and_store():
+    log.info("Starting fetch_and_store")
     conn = get_connection()
     total = 0
     try:
         for feed_config in FEEDS:
+            log.info(f"Fetching feed: {feed_config['name']}")
             try:
                 feed = feedparser.parse(feed_config["url"])
+                log.info(f"Found {len(feed.entries)} entries in {feed_config['name']}")
                 for entry in feed.entries:
                     insert_article(conn, feed_config["name"], entry)
                     total += 1
                     sleep(0.5)
                 conn.commit()
-                print(f"Fetched {len(feed.entries)} articles from {feed_config['name']}")
+                log.info(f"Committed {len(feed.entries)} articles from {feed_config['name']}")
             except Exception as e:
-                print(f"Failed to fetch {feed_config['url']}: {e}")
+                log.error(f"Failed to process feed {feed_config['name']}: {e}")
                 conn.rollback()
-        print(f"Done. Total articles processed: {total}")
+        log.info(f"Done. Total articles processed: {total}")
     finally:
         conn.close()
 

@@ -14,7 +14,7 @@ Fetch articles from RSS feeds, extract full article content, and store them in a
 ## Feeds
 | Name | URL |
 |------|-----|
-| BNT News | https://news.bnt.bg/bg/rss/news.xml |
+| BGonAir | https://www.bgonair.bg/rss/c/2-bulgaria |
 | Investor.bg Top News | https://www.investor.bg/rss/c/578-top-novini |
 
 ## Database Schema

@@ -6,8 +6,8 @@ Fetches Bulgarian news articles from RSS feeds, extracts full content, and gener
 
 | Service | Script | Schedule | Description |
 |---------|--------|----------|-------------|
-| RSS Fetcher | `rss_fetcher.py` | Every 30 min | Fetches articles from BNT News and Investor.bg, extracts full content, stores in Postgres |
-| BNT Summariser | `ai_summariser_bnt.py` | Daily 8am | Summarises previous day's BNT News articles, posts to Discord |
+| RSS Fetcher | `rss_fetcher.py` | Every 30 min | Fetches articles from BGonAir and Investor.bg, extracts full content, stores in Postgres |
+| BGonAir Summariser | `ai_summariser_bgonair.py` | Daily 8am | Summarises previous day's BGonAir articles, posts to Discord |
 | Investor Summariser | `ai_summariser_investor.py` | Daily 8am | Summarises previous day's Investor.bg articles with markets section on weekdays, posts to Discord |
 | Investor Today | `ai_summariser_investor_today.py` | On demand | Same as above but for today's articles |
 
@@ -35,7 +35,7 @@ digests (id, date, source, content, batch_id, created_at)
 ```env
 DATABASE_URL=postgresql://user:password@host:5432/dbname
 ANTHROPIC_API_KEY=your-anthropic-api-key
-DISCORD_WEBHOOK_BNT=https://discord.com/api/webhooks/...
+DISCORD_WEBHOOK_BGONAIR=https://discord.com/api/webhooks/...
 DISCORD_WEBHOOK_INVESTOR=https://discord.com/api/webhooks/...
 ```
 
@@ -52,7 +52,7 @@ python -m venv .venv
 Each service is deployed separately on Railway using its own Dockerfile:
 
 - `Dockerfile_rss_fetcher`
-- `Dockerfile_summariser_bnt`
+- `Dockerfile_summariser_bgonair`
 - `Dockerfile_summariser_investor`
 - `Dockerfile_summariser_investor_today`
 

@@ -5,7 +5,7 @@ Three scripts fetch unsummarised articles from PostgreSQL, send them to Claude S
 
 | Script | Runs | Target articles |
 |--------|------|-----------------|
-| `ai_summariser_bnt.py` | Daily cron | BNT News — previous day |
+| `ai_summariser_bgonair.py` | Daily cron | BGonAir — previous day |
 | `ai_summariser_investor.py` | Daily cron | Investor.bg — previous day |
 | `ai_summariser_investor_today.py` | On demand | Investor.bg — today |
 
@@ -24,7 +24,7 @@ Three scripts fetch unsummarised articles from PostgreSQL, send them to Claude S
 CREATE TABLE digests (
     id SERIAL PRIMARY KEY,
     date DATE NOT NULL,
-    source TEXT NOT NULL,          -- 'bnt' or 'investor'
+    source TEXT NOT NULL,          -- 'bgonair' or 'investor'
     content TEXT NOT NULL,         -- raw JSON from Claude
     batch_id TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -37,7 +37,7 @@ CREATE TABLE digests (
 ```env
 DATABASE_URL=postgresql://...
 ANTHROPIC_API_KEY=your-anthropic-api-key
-DISCORD_WEBHOOK_BNT=https://discord.com/api/webhooks/...
+DISCORD_WEBHOOK_BGONAIR=https://discord.com/api/webhooks/...
 DISCORD_WEBHOOK_INVESTOR=https://discord.com/api/webhooks/...
 ```
 
@@ -46,23 +46,19 @@ DISCORD_WEBHOOK_INVESTOR=https://discord.com/api/webhooks/...
 - **On-demand script**: targets today's date
 - "Yesterday/today" resolved in Bulgarian time (`Europe/Sofia`, UTC+2/+3) at runtime
 
-## BNT — System Prompt
+## BGonAir — System Prompt
 ```
-You are a Bulgarian news analyst summarising BNT News articles from the previous day.
+You are a Bulgarian news analyst summarising BGonAir articles. Write in Bulgarian.
 
-Your job:
-1. Filter out fluff, repetitive stories, and minor local incidents with no broader significance
-2. For each significant article write a 2-3 sentence summary explaining what happened and why it matters
-3. Write a "What happened yesterday" overview (2-3 paragraphs) covering the key events and their significance
+Write a thorough digest using the following sections with markdown headers:
 
-Format your response as JSON:
-{
-  "overview": "...",
-  "articles": [{"title": "...", "url": "...", "summary": "..."}]
-}
+# Какво се случи вчера
+A 2-3 paragraph high-level narrative of the day — what are the biggest stories, how do they connect, and why do they matter? Keep it brief and readable. Save the deep analysis for the sections below.
 
-Return only valid JSON. No preamble, no markdown fences.
-Skip celebrity news, traffic incidents, and purely local stories unless they have national significance.
+# Ключови теми
+Group ALL stories into thematic clusters. Use ### subheadings for each theme (e.g. ### Политика, ### Икономика, ### Общество, ### Свят, ### Региони и тн.). For each theme write a substantive paragraph with the detail, numbers, and analysis. This is where the depth goes. Nothing important should be omitted. Do not repeat the overview — go deeper. Include regional news — stories from Bulgarian cities and regions are relevant even if not nationally significant. Skip celebrity gossip, traffic incidents, and purely trivial human-interest stories.
+
+Write in Bulgarian — no English words except proper nouns and brand names. Use a clear, analytical tone. Flowing prose within each section, no bullet points.
 ```
 
 ## Investor — System Prompt (weekday)
@@ -117,6 +113,6 @@ requests==2.32.3
 ```
 
 ## Dockerfiles
-- `Dockerfile_summariser_bnt`
+- `Dockerfile_summariser_bgonair`
 - `Dockerfile_summariser_investor`
 - `Dockerfile_summariser_investor_today`

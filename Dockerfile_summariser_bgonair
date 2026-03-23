@@ -5,6 +5,6 @@ WORKDIR /app
 COPY requirements.summariser.txt .
 RUN pip install --no-cache-dir -r requirements.summariser.txt
 
-COPY ai_summariser_bnt.py .
+COPY ai_summariser_bgonair.py .
 
-CMD ["python", "ai_summariser_bnt.py"]
+CMD ["python", "ai_summariser_bgonair.py"]

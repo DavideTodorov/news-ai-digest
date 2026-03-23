@@ -49,7 +49,7 @@ def parse_published(entry):
 def fetch_article_content(url):
     try:
         r = requests.get(url, headers=HEADERS, timeout=10)
-        html = r.content.decode("utf-8")
+        html = r.content.decode(r.apparent_encoding or "utf-8", errors="replace")
         text = trafilatura.extract(html, favor_recall=True)
         return text or ""
     except Exception as e:

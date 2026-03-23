@@ -47,7 +47,6 @@ def fetch_articles(conn, target_date):
             SELECT id, title, url, content
             FROM articles
             WHERE feed_source = 'BNT News'
-              AND summarised = FALSE
               AND DATE(published_at AT TIME ZONE 'Europe/Sofia') = %s
             ORDER BY published_at DESC
         """, (target_date,))
@@ -150,6 +149,10 @@ def run():
         if not raw:
             log.error("Batch failed or returned no results.")
             return
+
+        raw = raw.strip()
+        if raw.startswith("```"):
+            raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
 
         try:
             digest = json.loads(raw)

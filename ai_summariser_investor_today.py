@@ -118,21 +118,23 @@ def send_to_discord(text, target_date):
         log.warning("DISCORD_WEBHOOK_INVESTOR not set, skipping Discord notification")
         return
 
-    date_label = target_date.strftime("%d %b %Y")
-    sections = re.split(r'\n(?=## )', text.strip())
+    now = datetime.now(SOFIA_TZ)
+    date_label = target_date.strftime("%d.%m.%Y")
+    time_label = now.strftime("%H:%M")
+    sections = re.split(r'\n(?=# [^#])', text.strip())
     first = True
 
     for section in sections:
         lines = section.strip().split('\n', 1)
-        if lines[0].startswith('## '):
-            title = lines[0][3:].strip()
+        if lines[0].startswith('# '):
+            title = lines[0].lstrip('#').strip()
             body = lines[1].strip() if len(lines) > 1 else ''
         else:
-            title = f"📈 Investor.bg Digest — {date_label}"
+            title = f"📈 Investor.bg — Какво се случи на {date_label} ({time_label})"
             body = lines[0].strip()
 
         if first:
-            title = f"📈 Investor.bg — {date_label} — {title}" if not title.startswith('📈') else title
+            title = f"📈 Investor.bg — Какво се случи на {date_label} ({time_label})"
             first = False
 
         while body:

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m venv .venv)",
+      "Bash(.venv/Scripts/pip install:*)",
+      "Bash(.venv/Scripts/python -c \"import rss_fetcher; print\\(''OK''\\)\")",
+      "Bash(.venv/Scripts/python -c \":*)",
+      "Read(//tmp/**)",
+      "Bash(python -c \":*)"
+    ]
+  }
+}

@@ -84,7 +84,7 @@ def submit_batch(articles_text, target_date, is_weekday):
             "custom_id": f"investor-digest-{target_date}",
             "params": {
                 "model": "claude-sonnet-4-6",
-                "max_tokens": 4096,
+                "max_tokens": 8192,
                 "system": system_prompt,
                 "messages": [{
                     "role": "user",

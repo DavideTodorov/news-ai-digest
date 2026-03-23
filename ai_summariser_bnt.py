@@ -66,7 +66,7 @@ def submit_batch(articles_text, target_date):
             "custom_id": f"bnt-digest-{target_date}",
             "params": {
                 "model": "claude-sonnet-4-6",
-                "max_tokens": 4096,
+                "max_tokens": 8192,
                 "system": SYSTEM_PROMPT,
                 "messages": [{
                     "role": "user",

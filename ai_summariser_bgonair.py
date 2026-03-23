@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 SOFIA_TZ = ZoneInfo("Europe/Sofia")
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-SYSTEM_PROMPT = """You are a Bulgarian news analyst summarising BNT News articles. Write in Bulgarian.
+SYSTEM_PROMPT = """You are a Bulgarian news analyst summarising BGonAir articles. Write in Bulgarian.
 
 Write a thorough digest using the following sections with markdown headers:
 
@@ -42,7 +42,7 @@ def fetch_articles(conn, target_date):
         cur.execute("""
             SELECT id, title, url, content
             FROM articles
-            WHERE feed_source = 'BNT News'
+            WHERE feed_source = 'BGonAir'
               AND DATE(published_at AT TIME ZONE 'Europe/Sofia') = %s
               AND word_count >= 50
             ORDER BY published_at DESC
@@ -60,14 +60,14 @@ def build_articles_text(articles):
 def submit_batch(articles_text, target_date):
     batch = client.messages.batches.create(
         requests=[{
-            "custom_id": f"bnt-digest-{target_date}",
+            "custom_id": f"bgonair-digest-{target_date}",
             "params": {
                 "model": "claude-sonnet-4-6",
                 "max_tokens": 8192,
                 "system": SYSTEM_PROMPT,
                 "messages": [{
                     "role": "user",
-                    "content": f"Here are yesterday's BNT News articles ({target_date}):\n\n{articles_text}"
+                    "content": f"Here are yesterday's BGonAir articles ({target_date}):\n\n{articles_text}"
                 }]
             }
         }]
@@ -95,9 +95,9 @@ def mark_summarised(conn, article_ids):
 
 
 def send_to_discord(text, target_date):
-    webhook_url = os.getenv("DISCORD_WEBHOOK_BNT")
+    webhook_url = os.getenv("DISCORD_WEBHOOK_BGONAIR")
     if not webhook_url:
-        log.warning("DISCORD_WEBHOOK_BNT not set, skipping Discord notification")
+        log.warning("DISCORD_WEBHOOK_BGONAIR not set, skipping Discord notification")
         return
 
     date_label = target_date.strftime("%d.%m.%Y")
@@ -110,11 +110,11 @@ def send_to_discord(text, target_date):
             title = lines[0].lstrip('#').strip()
             body = lines[1].strip() if len(lines) > 1 else ''
         else:
-            title = f"📰 BNT — Какво се случи на {date_label}"
+            title = f"📰 BGonAir — Какво се случи на {date_label}"
             body = lines[0].strip()
 
         if first:
-            title = f"📰 BNT — Какво се случи на {date_label}"
+            title = f"📰 BGonAir — Какво се случи на {date_label}"
             first = False
 
         while body:
@@ -127,7 +127,7 @@ def send_to_discord(text, target_date):
 
 def run():
     yesterday = (datetime.now(SOFIA_TZ) - timedelta(days=1)).date()
-    log.info(f"Running BNT summariser for {yesterday}")
+    log.info(f"Running BGonAir summariser for {yesterday}")
 
     conn = get_connection()
     try:

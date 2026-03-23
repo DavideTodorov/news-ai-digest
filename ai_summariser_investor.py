@@ -21,17 +21,19 @@ SYSTEM_PROMPT_WEEKDAY = """You are a financial and business news analyst summari
 
 Write a thorough digest using the following sections with markdown headers:
 
-## Какво се случи вчера
-A 3-4 paragraph narrative overview of the day's key developments — geopolitical events, economic news, corporate moves, policy changes. Connect the dots between stories where relevant. Explain causes, consequences, and significance, not just what happened.
+# Какво се случи вчера
+A 2-3 paragraph high-level narrative of the day — what are the biggest stories, how do they connect, and why do they matter? Keep it brief and readable. Do NOT include detailed numbers, quotes, or deep analysis here — that belongs in the sections below.
 
-## Пазари
+# Пазари
 Cover market movements with context:
 **Азия** — key indices, performance, main drivers
 **Европа** — key indices, performance, main drivers
 **САЩ** — futures or close, main drivers, sector moves
 
-## Ключови теми
-Group the remaining stories into thematic clusters (e.g. Енергетика, Банки и финанси, Компании, Макроикономика). For each theme write a substantive paragraph covering what happened and why it matters. Cover all significant articles — nothing important should be omitted.
+# Ключови теми
+Group ALL stories into thematic clusters (e.g. Енергетика, Банки и финанси, Компании, Макроикономика). For each theme write a substantive paragraph with the detail, numbers, and analysis. This is where the depth goes. Nothing important should be omitted. Do not repeat the overview — go deeper.
+
+Skip pure PR announcements and minor corporate filings with no broader market relevance.
 
 Write in a clear, analytical tone. Flowing prose within each section, no bullet points."""
 
@@ -39,11 +41,13 @@ SYSTEM_PROMPT_WEEKEND = """You are a financial and business news analyst summari
 
 Write a thorough digest using the following sections with markdown headers:
 
-## Какво се случи вчера
-A 3-4 paragraph narrative overview of the day's key developments — economic news, corporate moves, policy changes. Connect the dots between stories where relevant. Explain causes, consequences, and significance, not just what happened.
+# Какво се случи вчера
+A 2-3 paragraph high-level narrative of the day — what are the biggest stories, how do they connect, and why do they matter? Keep it brief and readable. Do NOT include detailed numbers, quotes, or deep analysis here — that belongs in the sections below.
 
-## Ключови теми
-Group the remaining stories into thematic clusters (e.g. Енергетика, Банки и финанси, Компании, Макроикономика). For each theme write a substantive paragraph covering what happened and why it matters. Cover all significant articles — nothing important should be omitted.
+# Ключови теми
+Group ALL stories into thematic clusters (e.g. Енергетика, Банки и финанси, Компании, Макроикономика). For each theme write a substantive paragraph with the detail, numbers, and analysis. This is where the depth goes. Nothing important should be omitted. Do not repeat the overview — go deeper.
+
+Skip pure PR announcements and minor corporate filings with no broader market relevance.
 
 Write in a clear, analytical tone. Flowing prose within each section, no bullet points."""
 
@@ -120,12 +124,12 @@ def send_to_discord(text, target_date):
         return
 
     date_label = target_date.strftime("%d %b %Y")
-    sections = re.split(r'\n(?=## )', text.strip())
+    sections = re.split(r'\n(?=#)', text.strip())
     first = True
 
     for section in sections:
         lines = section.strip().split('\n', 1)
-        if lines[0].startswith('## '):
+        if lines[0].startswith('#'):
             title = lines[0][3:].strip()
             body = lines[1].strip() if len(lines) > 1 else ''
         else:

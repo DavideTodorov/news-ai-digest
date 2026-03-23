@@ -27,7 +27,7 @@ A 2-3 paragraph high-level narrative of the day — what are the biggest stories
 # Ключови теми
 Group ALL stories into thematic clusters. Use ### subheadings for each theme (e.g. ### Политика, ### Икономика, ### Общество, ### Свят, ### Региони и тн.). For each theme write a substantive paragraph with the detail, numbers, and analysis. This is where the depth goes. Nothing important should be omitted. Do not repeat the overview — go deeper. Include regional news — stories from Bulgarian cities and regions are relevant even if not nationally significant. Skip celebrity gossip, traffic incidents, and purely trivial human-interest stories.
 
-Write in a clear, analytical tone. Flowing prose within each section, no bullet points."""
+Write entirely in Bulgarian — no English words. Use a clear, analytical tone. Flowing prose within each section, no bullet points."""
 
 
 def get_connection():

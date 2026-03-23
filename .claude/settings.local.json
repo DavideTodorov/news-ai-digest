@@ -9,7 +9,9 @@
       "Bash(python -c \":*)",
       "Bash(mv Dockerfile.rss_fetcher Dockerfile_rss_fetcher)",
       "Bash(mv Dockerfile.summariser_bnt Dockerfile_summariser_bnt)",
-      "Bash(mv Dockerfile.summariser_investor Dockerfile_summariser_investor)"
+      "Bash(mv Dockerfile.summariser_investor Dockerfile_summariser_investor)",
+      "WebFetch(domain:www.anthropic.com)",
+      "WebFetch(domain:claude.com)"
     ]
   }
 }

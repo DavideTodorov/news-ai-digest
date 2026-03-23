@@ -71,7 +71,10 @@ def insert_article(conn, feed_name, entry):
             """
             INSERT INTO articles (article_id, feed_source, title, url, content, word_count, published_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
-            ON CONFLICT (url) DO NOTHING
+            ON CONFLICT (url) DO UPDATE SET
+                title = EXCLUDED.title,
+                content = EXCLUDED.content,
+                word_count = EXCLUDED.word_count
             """,
             (
                 entry.get("id") or entry.get("guid"),

@@ -35,7 +35,7 @@ Group ALL stories into thematic clusters. Use ### subheadings for each theme (e.
 
 Skip pure PR announcements and minor corporate filings with no broader market relevance.
 
-Write entirely in Bulgarian — no English words. Use a clear, analytical tone. Flowing prose within each section, no bullet points."""
+Write in Bulgarian — no English words except proper nouns, brand names, and index codes. Use a clear, analytical tone. Flowing prose within each section, no bullet points."""
 
 SYSTEM_PROMPT_WEEKEND = """You are a financial and business news analyst summarising Investor.bg articles. Write in Bulgarian.
 
@@ -49,7 +49,7 @@ Group ALL stories into thematic clusters. Use ### subheadings for each theme (e.
 
 Skip pure PR announcements and minor corporate filings with no broader market relevance.
 
-Write entirely in Bulgarian — no English words. Use a clear, analytical tone. Flowing prose within each section, no bullet points."""
+Write in Bulgarian — no English words except proper nouns, brand names, and index codes. Use a clear, analytical tone. Flowing prose within each section, no bullet points."""
 
 
 def get_connection():

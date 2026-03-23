@@ -19,7 +19,10 @@ HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 
 def get_connection():
-    return psycopg2.connect(os.getenv("DATABASE_URL"))
+    url = os.getenv("DATABASE_URL")
+    if not url:
+        raise RuntimeError("DATABASE_URL is not set")
+    return psycopg2.connect(url)
 
 
 def strip_html(text):

@@ -89,15 +89,6 @@ def poll_batch(batch_id, interval=60):
     return None
 
 
-def save_digest(conn, batch_id, content, target_date):
-    with conn.cursor() as cur:
-        cur.execute("""
-            INSERT INTO digests (date, source, content, batch_id)
-            VALUES (%s, %s, %s, %s)
-            ON CONFLICT (date, source) DO UPDATE SET content = EXCLUDED.content
-        """, (target_date, "bnt", content, batch_id))
-
-
 def mark_summarised(conn, article_ids):
     with conn.cursor() as cur:
         cur.execute("UPDATE articles SET summarised = TRUE WHERE id = ANY(%s)", (article_ids,))
@@ -156,10 +147,8 @@ def run():
             log.error("Batch failed or returned no results.")
             return
 
-        save_digest(conn, batch_id, digest, yesterday)
         mark_summarised(conn, article_ids)
         conn.commit()
-        log.info(f"Digest saved for {yesterday}")
 
         try:
             send_to_discord(digest, yesterday)

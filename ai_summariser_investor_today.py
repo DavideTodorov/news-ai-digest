@@ -108,15 +108,6 @@ def poll_batch(batch_id, interval=60):
     return None
 
 
-def save_digest(conn, batch_id, content, target_date):
-    with conn.cursor() as cur:
-        cur.execute("""
-            INSERT INTO digests (date, source, content, batch_id)
-            VALUES (%s, %s, %s, %s)
-            ON CONFLICT (date, source) DO UPDATE SET content = EXCLUDED.content
-        """, (target_date, "investor", content, batch_id))
-
-
 def send_to_discord(text, target_date):
     webhook_url = os.getenv("DISCORD_WEBHOOK_INVESTOR")
     if not webhook_url:
@@ -169,10 +160,6 @@ def run():
         if not digest:
             log.error("Batch failed or returned no results.")
             return
-
-        save_digest(conn, batch_id, digest, today)
-        conn.commit()
-        log.info(f"Digest saved for {today}")
 
         try:
             send_to_discord(digest, today)

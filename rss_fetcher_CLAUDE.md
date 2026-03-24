@@ -15,7 +15,7 @@ Fetch articles from RSS feeds, extract full article content, and store them in a
 | Name | URL |
 |------|-----|
 | BGonAir | https://www.bgonair.bg/rss/c/2-bulgaria |
-| Investor.bg Top News | https://www.investor.bg/rss/c/578-top-novini |
+| Investor | https://www.investor.bg/rss/c/578-top-novini |
 
 ## Database Schema
 

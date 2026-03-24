@@ -64,7 +64,7 @@ def fetch_articles(conn, target_date):
         cur.execute("""
             SELECT id, title, url, content
             FROM articles
-            WHERE feed_source = 'Investor.bg Top News'
+            WHERE feed_source = 'Investor'
               AND DATE(published_at AT TIME ZONE 'Europe/Sofia') = %s
               AND word_count >= 50
             ORDER BY published_at DESC

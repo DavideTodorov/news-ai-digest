@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 
 FEEDS = [
     {"name": "BGonAir", "url": "https://www.bgonair.bg/rss/c/2-bulgaria"},
-    {"name": "Investor.bg Top News", "url": "https://www.investor.bg/rss/c/578-top-novini"},
+    {"name": "Investor", "url": "https://www.investor.bg/rss/c/578-top-novini"},
 ]
 
 HEADERS = {"User-Agent": "Mozilla/5.0"}

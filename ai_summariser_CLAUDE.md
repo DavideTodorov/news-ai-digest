@@ -1,11 +1,13 @@
 # AI Summariser — CLAUDE.md
 
 ## Purpose
-Two scripts fetch unsummarised articles from PostgreSQL, send them to Claude Sonnet 4.6 via the Batch API, and post the digest to Discord.
+Four scripts fetch unsummarised articles from PostgreSQL, send them to Claude Sonnet 4.6 via the Batch API, and post the digest to Discord.
 
 | Script | Runs | Target articles |
 |--------|------|-----------------|
 | `ai_summariser.py` | Daily cron | BGonAir + Investor.bg — previous day (both sources in one run) |
+| `ai_summariser_bgonair.py` | Standalone / manual | BGonAir — previous day (single source) |
+| `ai_summariser_investor.py` | Standalone / manual | Investor.bg — previous day (single source) |
 | `ai_summariser_investor_today.py` | On demand | Investor.bg — today |
 
 ## Stack
@@ -67,11 +69,13 @@ DISCORD_WEBHOOK_INVESTOR=https://discord.com/api/webhooks/...
 ```
 You are a Bulgarian news analyst summarising BGonAir articles. Write in Bulgarian.
 
+Aim for brevity — every sentence should add new information. Avoid restating facts already mentioned in earlier sections.
+
 # Какво се случи вчера
-A 2-3 paragraph high-level narrative of the day — what are the biggest stories, how do they connect, and why do they matter?
+1-2 paragraphs — narrative arc of the day, brief scene-setter only.
 
 # Ключови теми
-Group ALL stories into thematic clusters. Use ### subheadings for each theme. Write substantive paragraphs with detail, numbers, and analysis. Include regional news. Skip celebrity gossip, traffic incidents, and purely trivial human-interest stories.
+Group ALL stories into thematic clusters. Use ### subheadings for each theme. Write substantive but tight paragraphs — key details and analysis, no filler, no repetition from the overview. Include regional news. Skip celebrity gossip, traffic incidents, and purely trivial human-interest stories.
 
 Write in Bulgarian — no English words except proper nouns and brand names. Flowing prose, no bullet points.
 ```
@@ -80,14 +84,16 @@ Write in Bulgarian — no English words except proper nouns and brand names. Flo
 ```
 You are a financial and business news analyst summarising Investor.bg articles. Write in Bulgarian.
 
+Aim for brevity — every sentence should add new information. Avoid restating facts already mentioned in earlier sections.
+
 # Какво се случи вчера
-A 2-3 paragraph high-level narrative of the day.
+1-2 paragraphs — narrative arc of the day, brief scene-setter only.
 
 # Пазари
 **Азия** / **Европа** / **САЩ** — key indices, performance, main drivers.
 
 # Ключови теми
-Group ALL stories into thematic clusters. Use ### subheadings. Write substantive paragraphs with detail, numbers, and analysis. Skip pure PR announcements and minor corporate filings.
+Group ALL stories into thematic clusters. Use ### subheadings. Write substantive but tight paragraphs — key numbers and analysis, no filler, strictly no repetition from the overview or markets sections. Skip pure PR announcements and minor corporate filings.
 
 Write in Bulgarian — no English words except proper nouns, brand names, and index codes. Flowing prose, no bullet points.
 ```
@@ -117,5 +123,7 @@ requests==2.32.3
 ```
 
 ## Dockerfiles
-- `Dockerfile_summariser` — runs `ai_summariser.py`
-- `Dockerfile_summariser_investor_today`
+- `Dockerfile_summariser` — runs `ai_summariser.py` (both sources, daily cron)
+- `Dockerfile_summariser_bgonair` — runs `ai_summariser_bgonair.py`
+- `Dockerfile_summariser_investor` — runs `ai_summariser_investor.py`
+- `Dockerfile_summariser_investor_today` — runs `ai_summariser_investor_today.py`

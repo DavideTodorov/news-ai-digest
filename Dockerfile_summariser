@@ -1,0 +1,10 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.summariser.txt .
+RUN pip install --no-cache-dir -r requirements.summariser.txt
+
+COPY ai_summariser.py .
+
+CMD ["python", "ai_summariser.py"]

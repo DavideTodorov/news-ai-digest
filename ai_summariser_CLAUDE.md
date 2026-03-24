@@ -1,12 +1,11 @@
 # AI Summariser — CLAUDE.md
 
 ## Purpose
-Three scripts fetch unsummarised articles from PostgreSQL, send them to Claude Sonnet 4.6 via the Batch API, store the digest, and post it to Discord.
+Two scripts fetch unsummarised articles from PostgreSQL, send them to Claude Sonnet 4.6 via the Batch API, and post the digest to Discord.
 
 | Script | Runs | Target articles |
 |--------|------|-----------------|
-| `ai_summariser_bgonair.py` | Daily cron | BGonAir — previous day |
-| `ai_summariser_investor.py` | Daily cron | Investor.bg — previous day |
+| `ai_summariser.py` | Daily cron | BGonAir + Investor.bg — previous day (both sources in one run) |
 | `ai_summariser_investor_today.py` | On demand | Investor.bg — today |
 
 ## Stack
@@ -15,6 +14,23 @@ Three scripts fetch unsummarised articles from PostgreSQL, send them to Claude S
 - `psycopg2-binary` — Postgres connection
 - `python-dotenv` — env vars
 - `requests` — Discord webhook
+
+## Source Config (`ai_summariser.py`)
+
+Each source is defined as a dict in the `SOURCES` list:
+
+```python
+{
+    "name": str,               # used in batch custom_id
+    "feed_source": str,        # matches articles.feed_source in DB
+    "get_prompt": callable,    # fn(is_weekday: bool) -> str
+    "webhook_env": str,        # env var name for the Discord webhook URL
+    "discord_label": callable, # fn(date_str: str) -> str
+    "color": int,              # Discord embed colour
+}
+```
+
+Sources are processed sequentially. Each gets its own Batch API call, its own `mark_summarised` + commit, and its own Discord send — fully independent.
 
 ## Database Schema
 
@@ -25,7 +41,7 @@ CREATE TABLE digests (
     id SERIAL PRIMARY KEY,
     date DATE NOT NULL,
     source TEXT NOT NULL,          -- 'bgonair' or 'investor'
-    content TEXT NOT NULL,         -- raw JSON from Claude
+    content TEXT NOT NULL,
     batch_id TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE (date, source)
@@ -42,54 +58,44 @@ DISCORD_WEBHOOK_INVESTOR=https://discord.com/api/webhooks/...
 ```
 
 ## Date Logic
-- **Cron scripts**: target `DATE(published_at AT TIME ZONE 'Europe/Sofia') = yesterday`
+- **Cron script**: targets `DATE(published_at AT TIME ZONE 'Europe/Sofia') = yesterday`
 - **On-demand script**: targets today's date
 - "Yesterday/today" resolved in Bulgarian time (`Europe/Sofia`, UTC+2/+3) at runtime
+- Investor weekday/weekend determined by `yesterday.weekday() < 5`
 
 ## BGonAir — System Prompt
 ```
 You are a Bulgarian news analyst summarising BGonAir articles. Write in Bulgarian.
 
-Write a thorough digest using the following sections with markdown headers:
-
 # Какво се случи вчера
-A 2-3 paragraph high-level narrative of the day — what are the biggest stories, how do they connect, and why do they matter? Keep it brief and readable. Save the deep analysis for the sections below.
+A 2-3 paragraph high-level narrative of the day — what are the biggest stories, how do they connect, and why do they matter?
 
 # Ключови теми
-Group ALL stories into thematic clusters. Use ### subheadings for each theme (e.g. ### Политика, ### Икономика, ### Общество, ### Свят, ### Региони и тн.). For each theme write a substantive paragraph with the detail, numbers, and analysis. This is where the depth goes. Nothing important should be omitted. Do not repeat the overview — go deeper. Include regional news — stories from Bulgarian cities and regions are relevant even if not nationally significant. Skip celebrity gossip, traffic incidents, and purely trivial human-interest stories.
+Group ALL stories into thematic clusters. Use ### subheadings for each theme. Write substantive paragraphs with detail, numbers, and analysis. Include regional news. Skip celebrity gossip, traffic incidents, and purely trivial human-interest stories.
 
-Write in Bulgarian — no English words except proper nouns and brand names. Use a clear, analytical tone. Flowing prose within each section, no bullet points.
+Write in Bulgarian — no English words except proper nouns and brand names. Flowing prose, no bullet points.
 ```
 
 ## Investor — System Prompt (weekday)
 ```
-You are a financial and business news analyst summarising Investor.bg articles from the previous day.
+You are a financial and business news analyst summarising Investor.bg articles. Write in Bulgarian.
 
-Your job:
-1. For each significant article write a 2-3 sentence summary explaining what happened and why it matters
-2. Write a "What happened yesterday" overview (2-3 paragraphs) covering key developments and their significance
-3. Write a dedicated "Markets" section covering:
-   - Asian markets: overall performance and key drivers
-   - European markets: overall performance and key drivers
-   - US markets: overall performance and key drivers
+# Какво се случи вчера
+A 2-3 paragraph high-level narrative of the day.
 
-Format your response as JSON:
-{
-  "overview": "...",
-  "markets": {"asia": "...", "europe": "...", "us": "..."},
-  "articles": [{"title": "...", "url": "...", "summary": "..."}]
-}
+# Пазари
+**Азия** / **Европа** / **САЩ** — key indices, performance, main drivers.
 
-Return only valid JSON. No preamble, no markdown fences.
+# Ключови теми
+Group ALL stories into thematic clusters. Use ### subheadings. Write substantive paragraphs with detail, numbers, and analysis. Skip pure PR announcements and minor corporate filings.
+
+Write in Bulgarian — no English words except proper nouns, brand names, and index codes. Flowing prose, no bullet points.
 ```
 
-On **weekends** the markets section is omitted from both the prompt and the JSON format.
+On **weekends** the `# Пазари` section is omitted from the prompt.
 
 ## Discord Format
-Each script sends to its own webhook:
-1. **Overview embed** — title + overview paragraph
-2. **Markets embed** (Investor weekdays only) — Asia / Europe / US sections
-3. **Per-article messages** — bold title, summary, URL
+Each source posts to its own webhook. The digest is split on top-level `#` headers; each section becomes a separate embed. Bodies longer than 4096 characters are chunked with `(продължение)` appended to the title.
 
 ## Cron Schedule (Railway)
 ```
@@ -97,12 +103,10 @@ Each script sends to its own webhook:
 ```
 
 ## Key Behaviours
-- Filters by `feed_source` so each script only processes its own articles
-- `summarised = FALSE` filter prevents reprocessing; set to `TRUE` only after successful digest save
+- Filters by `feed_source` so each source only processes its own articles
 - Polls Batch API every 60s — typically resolves in 1–10 minutes
-- `ON CONFLICT (date, source) DO UPDATE` — safe to re-run on failure
-- `json.loads` wrapped in try/except — logs raw response on parse failure
-- Discord errors are logged but do not fail the run (digest already saved to DB)
+- `mark_summarised` + `conn.commit()` called per source after successful digest — a failure on one source does not affect the other
+- Discord errors are logged but do not fail the run
 
 ## Dependencies (requirements.summariser.txt)
 ```
@@ -113,6 +117,5 @@ requests==2.32.3
 ```
 
 ## Dockerfiles
-- `Dockerfile_summariser_bgonair`
-- `Dockerfile_summariser_investor`
+- `Dockerfile_summariser` — runs `ai_summariser.py`
 - `Dockerfile_summariser_investor_today`

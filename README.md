@@ -7,9 +7,8 @@ Fetches Bulgarian news articles from RSS feeds, extracts full content, and gener
 | Service | Script | Schedule | Description |
 |---------|--------|----------|-------------|
 | RSS Fetcher | `rss_fetcher.py` | Every 30 min | Fetches articles from BGonAir and Investor.bg, extracts full content, stores in Postgres |
-| BGonAir Summariser | `ai_summariser_bgonair.py` | Daily 8am | Summarises previous day's BGonAir articles, posts to Discord |
-| Investor Summariser | `ai_summariser_investor.py` | Daily 8am | Summarises previous day's Investor.bg articles with markets section on weekdays, posts to Discord |
-| Investor Today | `ai_summariser_investor_today.py` | On demand | Same as above but for today's articles |
+| Summariser | `ai_summariser.py` | Daily 8am | Summarises previous day's articles for all sources (BGonAir + Investor.bg), posts to separate Discord channels |
+| Investor Today | `ai_summariser_investor_today.py` | On demand | Summarises today's Investor.bg articles |
 
 ## Stack
 
@@ -52,8 +51,7 @@ python -m venv .venv
 Each service is deployed separately on Railway using its own Dockerfile:
 
 - `Dockerfile_rss_fetcher`
-- `Dockerfile_summariser_bgonair`
-- `Dockerfile_summariser_investor`
+- `Dockerfile_summariser` (runs `ai_summariser.py`)
 - `Dockerfile_summariser_investor_today`
 
 See `rss_fetcher_CLAUDE.md` and `ai_summariser_CLAUDE.md` for full implementation details.

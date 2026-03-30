@@ -117,6 +117,17 @@ def mark_summarised(conn, article_ids):
         cur.execute("UPDATE articles SET summarised = TRUE WHERE id = ANY(%s)", (article_ids,))
 
 
+def save_digest(conn, date, content, batch_id):
+    with conn.cursor() as cur:
+        cur.execute("""
+            INSERT INTO digests (date, source, content, batch_id)
+            VALUES (%s, 'investor', %s, %s)
+            ON CONFLICT (date, source) DO UPDATE
+                SET content = EXCLUDED.content,
+                    batch_id = EXCLUDED.batch_id
+        """, (date, content, batch_id))
+
+
 def send_to_discord(text, target_date):
     webhook_url = os.getenv("DISCORD_WEBHOOK_INVESTOR")
     if not webhook_url:
@@ -171,6 +182,7 @@ def run():
             log.error("Batch failed or returned no results.")
             return
 
+        save_digest(conn, yesterday, digest, batch_id)
         mark_summarised(conn, article_ids)
         conn.commit()
 

@@ -40,13 +40,13 @@ def get_connection():
 def fetch_articles(conn, target_date):
     with conn.cursor() as cur:
         cur.execute("""
-            SELECT id, title, url, content
-            FROM articles
-            WHERE feed_source = 'BGonAir'
-              AND DATE(published_at AT TIME ZONE 'Europe/Sofia') = %s
-              AND word_count >= 50
-            ORDER BY published_at DESC
-        """, (target_date,))
+                    SELECT id, title, url, content
+                    FROM articles
+                    WHERE feed_source = 'BGonAir'
+                      AND DATE (published_at AT TIME ZONE 'Europe/Sofia') = %s
+                      AND word_count >= 50
+                    ORDER BY published_at DESC
+                    """, (target_date,))
         return cur.fetchall()
 
 
@@ -92,6 +92,17 @@ def poll_batch(batch_id, interval=60):
 def mark_summarised(conn, article_ids):
     with conn.cursor() as cur:
         cur.execute("UPDATE articles SET summarised = TRUE WHERE id = ANY(%s)", (article_ids,))
+
+
+def save_digest(conn, date, content, batch_id):
+    with conn.cursor() as cur:
+        cur.execute("""
+            INSERT INTO digests (date, source, content, batch_id)
+            VALUES (%s, 'bgonair', %s, %s)
+            ON CONFLICT (date, source) DO UPDATE
+                SET content = EXCLUDED.content,
+                    batch_id = EXCLUDED.batch_id
+        """, (date, content, batch_id))
 
 
 def send_to_discord(text, target_date):
@@ -147,6 +158,7 @@ def run():
             log.error("Batch failed or returned no results.")
             return
 
+        save_digest(conn, yesterday, digest, batch_id)
         mark_summarised(conn, article_ids)
         conn.commit()
 

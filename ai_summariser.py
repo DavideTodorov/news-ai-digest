@@ -152,6 +152,17 @@ def mark_summarised(conn, article_ids):
         cur.execute("UPDATE articles SET summarised = TRUE WHERE id = ANY(%s)", (article_ids,))
 
 
+def save_digest(conn, date, source_name, content, batch_id):
+    with conn.cursor() as cur:
+        cur.execute("""
+            INSERT INTO digests (date, source, content, batch_id)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (date, source) DO UPDATE
+                SET content = EXCLUDED.content,
+                    batch_id = EXCLUDED.batch_id
+        """, (date, source_name, content, batch_id))
+
+
 def send_to_discord(text, target_date, webhook_url, label_fn, color):
     date_label = target_date.strftime("%d.%m.%Y")
     sections = re.split(r'\n(?=# [^#])', text.strip())
@@ -201,6 +212,7 @@ def run_for_source(conn, source, target_date, is_weekday):
         log.error(f"Batch failed or returned no results for {feed_source}.")
         return
 
+    save_digest(conn, target_date, name, digest, batch_id)
     mark_summarised(conn, article_ids)
     conn.commit()
 

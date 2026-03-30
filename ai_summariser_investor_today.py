@@ -98,6 +98,17 @@ def submit_batch(articles_text, target_date, is_weekday):
     return batch.id
 
 
+def save_digest(conn, date, content, batch_id):
+    with conn.cursor() as cur:
+        cur.execute("""
+            INSERT INTO digests (date, source, content, batch_id)
+            VALUES (%s, 'investor', %s, %s)
+            ON CONFLICT (date, source) DO UPDATE
+                SET content = EXCLUDED.content,
+                    batch_id = EXCLUDED.batch_id
+        """, (date, content, batch_id))
+
+
 def poll_batch(batch_id, interval=60):
     while True:
         batch = client.messages.batches.retrieve(batch_id)
@@ -166,6 +177,9 @@ def run():
         if not digest:
             log.error("Batch failed or returned no results.")
             return
+
+        save_digest(conn, today, digest, batch_id)
+        conn.commit()
 
         try:
             send_to_discord(digest, today)

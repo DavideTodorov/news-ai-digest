@@ -4,13 +4,32 @@ Fetches Bulgarian news articles from RSS feeds, extracts full content, and gener
 
 ## Services
 
-| Service | Script | Schedule | Description |
-|---------|--------|----------|-------------|
-| RSS Fetcher | `rss_fetcher.py` | Every 30 min | Fetches articles from BGonAir and Investor.bg, extracts full content, stores in Postgres |
-| Summariser | `ai_summariser.py` | Daily 8am | Summarises previous day's articles for all sources (BGonAir + Investor.bg), posts to separate Discord channels |
-| BGonAir Summariser | `ai_summariser_bgonair.py` | Standalone / manual | Summarises previous day's BGonAir articles only |
-| Investor Summariser | `ai_summariser_investor.py` | Standalone / manual | Summarises previous day's Investor.bg articles only |
-| Investor Today | `ai_summariser_investor_today.py` | On demand | Summarises today's Investor.bg articles |
+| Service | Script | Schedule      | Description |
+|---------|--------|---------------|-------------|
+| RSS Fetcher | `fetcher/rss_fetcher.py` | Every 30 min  | Fetches articles from BGonAir and Investor.bg, extracts full content, stores in Postgres |
+| BGonAir Summariser | `summariser/bgonair.py` | Daily 2am UTC | Summarises previous day's BGonAir articles, posts to Discord |
+| Investor Summariser | `summariser/investor.py` | Daily 3am UTC | Summarises previous day's Investor.bg articles, posts to Discord |
+
+## Project Structure
+
+```
+news-ai-digest/
+├── fetcher/
+│   ├── rss_fetcher.py
+│   └── requirements.txt
+├── summariser/
+│   ├── lib/
+│   │   ├── prompts.py        # System prompts for each source
+│   │   ├── db.py             # Database helpers
+│   │   ├── claude_batch.py   # Batch API submit/poll
+│   │   └── discord.py        # Discord formatting and posting
+│   ├── bgonair.py
+│   └── investor.py
+├── Dockerfile_rss_fetcher
+├── Dockerfile_summariser_bgonair
+├── Dockerfile_summariser_investor
+└── analytics.sql
+```
 
 ## Stack
 
@@ -44,8 +63,8 @@ DISCORD_WEBHOOK_INVESTOR=https://discord.com/api/webhooks/...
 
 ```bash
 python -m venv .venv
-.venv/Scripts/pip install -r requirements.txt           # RSS fetcher
-.venv/Scripts/pip install -r requirements.summariser.txt  # Summarisers
+.venv/Scripts/pip install -r fetcher/requirements.txt        # RSS fetcher
+.venv/Scripts/pip install -r summariser/requirements.txt     # Summarisers
 ```
 
 ## Deployment
@@ -53,9 +72,5 @@ python -m venv .venv
 Each service is deployed separately on Railway using its own Dockerfile:
 
 - `Dockerfile_rss_fetcher`
-- `Dockerfile_summariser` (runs `ai_summariser.py`)
 - `Dockerfile_summariser_bgonair`
 - `Dockerfile_summariser_investor`
-- `Dockerfile_summariser_investor_today`
-
-See `rss_fetcher_CLAUDE.md` and `ai_summariser_CLAUDE.md` for full implementation details.

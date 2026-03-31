@@ -2,9 +2,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY requirements.summariser.txt .
-RUN pip install --no-cache-dir -r requirements.summariser.txt
+COPY summariser/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ai_summariser_bgonair.py .
+COPY summariser/ .
 
-CMD ["python", "ai_summariser_bgonair.py"]
+CMD ["python", "bgonair.py"]

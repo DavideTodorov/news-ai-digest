@@ -14,6 +14,11 @@ const SOURCE_LABELS: Record<string, string> = {
   investor: 'Investor.bg',
 }
 
+const SOURCE_COLOR: Record<string, string> = {
+  bgonair: 'var(--color-bgonair)',
+  investor: 'var(--color-investor)',
+}
+
 export default async function DigestPage({
   params,
 }: {
@@ -33,54 +38,86 @@ export default async function DigestPage({
   const dateEntry = dates.find((d) => d.date === date)
 
   return (
-    <div className="flex h-full overflow-hidden bg-white">
+    <div className="flex h-full overflow-hidden" style={{ background: 'var(--bg-base)' }}>
       <Sidebar dates={dates} currentSource={source} currentDate={date} />
 
       <main className="flex flex-col flex-1 min-w-0 overflow-hidden">
-        {/* Source tabs */}
-        <div className="flex-shrink-0 border-b border-gray-200 bg-white px-8">
-          <div className="flex gap-1">
-            {VALID_SOURCES.map((s) => {
-              const available = dateEntry?.sources.includes(s) ?? false
-              const isActive = s === source
+        {/* Top bar */}
+        <div
+          className="flex-shrink-0 px-8 flex items-center gap-1"
+          style={{
+            height: '48px',
+            borderBottom: '1px solid var(--border-subtle)',
+            background: 'var(--bg-surface)',
+          }}
+        >
+          {VALID_SOURCES.map((s) => {
+            const available = dateEntry?.sources.includes(s) ?? false
+            const isActive = s === source
 
-              if (!available && !isActive) {
-                return (
-                  <span
-                    key={s}
-                    className="px-4 py-4 text-sm font-medium border-b-2 border-transparent text-gray-300 cursor-not-allowed"
-                    title="No digest for this date"
-                  >
-                    {SOURCE_LABELS[s]}
-                  </span>
-                )
-              }
-
+            if (!available && !isActive) {
               return (
-                <Link
+                <span
                   key={s}
-                  href={`/${s}/${date}`}
-                  className={`px-4 py-4 text-sm font-medium border-b-2 transition-colors ${
-                    isActive
-                      ? 'border-slate-900 text-slate-900'
-                      : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
-                  }`}
+                  className="px-3 py-1.5 text-xs font-medium rounded-md cursor-not-allowed select-none"
+                  style={{ color: 'var(--text-muted)' }}
+                  title="No digest for this date"
                 >
                   {SOURCE_LABELS[s]}
-                </Link>
+                </span>
               )
-            })}
-          </div>
+            }
+
+            return (
+              <Link
+                key={s}
+                href={`/${s}/${date}`}
+                className="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-150"
+                style={{
+                  color: isActive ? 'white' : 'var(--text-secondary)',
+                  background: isActive ? 'var(--accent-soft)' : 'transparent',
+                }}
+              >
+                {SOURCE_LABELS[s]}
+              </Link>
+            )
+          })}
         </div>
 
-        {/* Digest content */}
+        {/* Content */}
         <div className="flex-1 overflow-y-auto">
-          <div className="max-w-3xl mx-auto px-8 py-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-1">
-              {SOURCE_LABELS[source]}
-            </h1>
-            <p className="text-sm text-gray-400 mb-8">{formatDate(date)}</p>
-            <DigestContent content={content} />
+          {/* Digest header */}
+          <div
+            className="px-14 pt-12 pb-9"
+            style={{ borderBottom: '1px solid var(--border-subtle)' }}
+          >
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-2 mb-4">
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ background: SOURCE_COLOR[source] }}
+                />
+                <span
+                  className="text-[11px] font-semibold uppercase tracking-[0.12em]"
+                  style={{ color: SOURCE_COLOR[source] }}
+                >
+                  {SOURCE_LABELS[source]}
+                </span>
+              </div>
+              <h1 className="text-[28px] font-bold leading-tight mb-2" style={{ color: 'var(--text-primary)' }}>
+                Daily Digest
+              </h1>
+              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                {formatDate(date)}
+              </p>
+            </div>
+          </div>
+
+          {/* Digest body */}
+          <div className="px-14 py-10">
+            <div className="max-w-2xl">
+              <DigestContent content={content} />
+            </div>
           </div>
         </div>
       </main>

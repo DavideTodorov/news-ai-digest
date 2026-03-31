@@ -6,3 +6,60 @@ html,
 body {
   height: 100%;
 }
+
+@layer base {
+  /* Dark theme (default) */
+  :root {
+    --bg-base: #08080e;
+    --bg-surface: #0e0e1a;
+    --bg-elevated: #141424;
+    --bg-hover: #1a1a2e;
+    --accent: #6366f1;
+    --accent-soft: rgba(99, 102, 241, 0.15);
+    --text-primary: #f0f0f8;
+    --text-secondary: #8888a8;
+    --text-muted: #4a4a68;
+    --border-subtle: rgba(255, 255, 255, 0.055);
+    --border-default: rgba(255, 255, 255, 0.1);
+    --color-bgonair: #10b981;
+    --color-investor: #f59e0b;
+  }
+
+  /* Light theme */
+  .light {
+    --bg-base: #f5f5fb;
+    --bg-surface: #ededf8;
+    --bg-elevated: #e4e4f2;
+    --bg-hover: #dcdcee;
+    --accent: #6366f1;
+    --accent-soft: rgba(99, 102, 241, 0.1);
+    --text-primary: #0f0f1c;
+    --text-secondary: #4a4a6e;
+    --text-muted: #9090b8;
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --border-default: rgba(0, 0, 0, 0.12);
+    --color-bgonair: #059669;
+    --color-investor: #d97706;
+  }
+
+  body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+  }
+}
+
+/* Thin, elegant scrollbars */
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+}

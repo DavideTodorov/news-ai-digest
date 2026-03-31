@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import type { DigestDate } from '@/lib/db'
 import { formatDateShort } from '@/lib/utils'
-import { cn } from '@/lib/utils'
 import { ThemeToggle } from '@/components/theme-toggle'
 
 type Props = {
@@ -33,95 +32,74 @@ export function Sidebar({ dates, currentSource, currentDate }: Props) {
 
   return (
     <aside
-      className="w-56 flex-shrink-0 flex flex-col h-full overflow-hidden"
-      style={{ background: 'var(--bg-surface)', borderRight: '1px solid var(--border-subtle)' }}
+      className="w-52 flex-shrink-0 flex flex-col h-full overflow-hidden"
+      style={{ background: 'var(--bg-sidebar)', borderRight: '1px solid var(--border)' }}
     >
       {/* Brand */}
-      <div className="px-5 py-5 flex-shrink-0" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-        <div className="flex items-center gap-3">
-          <div
-            className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-              boxShadow: '0 0 18px rgba(99,102,241,0.4)',
-            }}
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a4 4 0 0 1-4 4z" />
-              <path d="M8 6h8M8 10h8M8 14h4" />
-            </svg>
-          </div>
-          <div>
-            <p className="font-semibold text-[13px] leading-none" style={{ color: 'var(--text-primary)' }}>
-              News Digest
-            </p>
-            <p className="text-[11px] mt-1 leading-none" style={{ color: 'var(--text-muted)' }}>
-              AI summaries
-            </p>
-          </div>
-        </div>
+      <div className="px-5 pt-6 pb-5" style={{ borderBottom: '1px solid var(--border)' }}>
+        <h1 className="text-sm font-semibold tracking-tight" style={{ color: 'var(--text)' }}>
+          News Digest
+        </h1>
+        <p className="text-[11px] mt-1" style={{ color: 'var(--text-muted)' }}>
+          AI-powered summaries
+        </p>
       </div>
 
-      {/* Source legend */}
+      {/* Legend */}
       <div
-        className="px-5 py-3 flex items-center gap-4 flex-shrink-0"
-        style={{ borderBottom: '1px solid var(--border-subtle)' }}
+        className="px-5 py-2.5 flex gap-4"
+        style={{ borderBottom: '1px solid var(--border)' }}
       >
         <span className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-bgonair)' }} />
-          BGonAir
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--source-a)' }} />
+          BG
         </span>
         <span className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-investor)' }} />
-          Investor
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--source-b)' }} />
+          INV
         </span>
       </div>
 
-      {/* Date navigation */}
-      <nav className="flex-1 overflow-y-auto py-2 min-h-0">
+      {/* Dates */}
+      <nav className="flex-1 overflow-y-auto py-1 min-h-0">
         {grouped.map(([monthKey, monthDates]) => (
-          <div key={monthKey} className="mb-2">
+          <div key={monthKey}>
             <p
-              className="px-5 py-1.5 text-[10px] font-semibold uppercase tracking-widest select-none"
+              className="px-5 pt-4 pb-1 text-[10px] font-medium uppercase tracking-wider select-none"
               style={{ color: 'var(--text-muted)' }}
             >
               {formatMonth(monthKey)}
             </p>
             {monthDates.map(({ date, sources }) => {
-              const isActive = date === currentDate
+              const active = date === currentDate
               return (
                 <Link
                   key={date}
                   href={`/${currentSource}/${date}`}
-                  className={cn(
-                    'flex items-center justify-between px-5 py-[7px] text-[13px] relative transition-colors duration-100',
-                    !isActive && 'hover:bg-[var(--bg-hover)]'
-                  )}
+                  className="flex items-center justify-between px-5 py-[6px] text-[13px] relative transition-colors duration-100"
                   style={{
-                    color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                    background: isActive ? 'var(--accent-soft)' : undefined,
+                    color: active ? 'var(--text)' : 'var(--text-secondary)',
+                    background: active ? 'var(--bg-active)' : undefined,
                   }}
                 >
-                  {isActive && (
+                  {active && (
                     <span
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-5 rounded-r-full"
-                      style={{ background: 'var(--accent)' }}
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-4 rounded-r-sm"
+                      style={{ background: 'var(--text)' }}
                     />
                   )}
                   <span className="tabular-nums">{formatDateShort(date)}</span>
-                  <span className="flex items-center gap-1.5 ml-2">
+                  <span className="flex gap-1.5">
                     <span
                       className="w-1.5 h-1.5 rounded-full"
                       style={{
-                        background: sources.includes('bgonair') ? 'var(--color-bgonair)' : 'var(--text-muted)',
-                        opacity: sources.includes('bgonair') ? 1 : 0.3,
+                        background: sources.includes('bgonair') ? 'var(--source-a)' : 'transparent',
                       }}
                     />
                     <span
                       className="w-1.5 h-1.5 rounded-full"
                       style={{
-                        background: sources.includes('investor') ? 'var(--color-investor)' : 'var(--text-muted)',
-                        opacity: sources.includes('investor') ? 1 : 0.3,
+                        background: sources.includes('investor') ? 'var(--source-b)' : 'transparent',
                       }}
                     />
                   </span>
@@ -131,14 +109,12 @@ export function Sidebar({ dates, currentSource, currentDate }: Props) {
           </div>
         ))}
       </nav>
+
       {/* Footer */}
       <div
-        className="px-4 py-3 flex items-center justify-between flex-shrink-0"
-        style={{ borderTop: '1px solid var(--border-subtle)' }}
+        className="px-5 py-3 flex justify-end flex-shrink-0"
+        style={{ borderTop: '1px solid var(--border)' }}
       >
-        <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
-          Theme
-        </span>
         <ThemeToggle />
       </div>
     </aside>

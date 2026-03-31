@@ -8,58 +8,67 @@ body {
 }
 
 @layer base {
-  /* Dark theme (default) */
   :root {
-    --bg-base: #08080e;
-    --bg-surface: #0e0e1a;
-    --bg-elevated: #141424;
-    --bg-hover: #1a1a2e;
-    --accent: #6366f1;
-    --accent-soft: rgba(99, 102, 241, 0.15);
-    --text-primary: #f0f0f8;
-    --text-secondary: #8888a8;
-    --text-muted: #4a4a68;
-    --border-subtle: rgba(255, 255, 255, 0.055);
-    --border-default: rgba(255, 255, 255, 0.1);
-    --color-bgonair: #10b981;
-    --color-investor: #f59e0b;
+    --bg: #111111;
+    --bg-sidebar: #171717;
+    --bg-hover: #1f1f1f;
+    --bg-active: #252525;
+    --text: #e8e8e8;
+    --text-secondary: #999999;
+    --text-muted: #555555;
+    --border: #252525;
+    --link: #93a3f8;
+    --source-a: #4ade80;
+    --source-b: #fbbf24;
   }
 
-  /* Light theme */
   .light {
-    --bg-base: #f5f5fb;
-    --bg-surface: #ededf8;
-    --bg-elevated: #e4e4f2;
-    --bg-hover: #dcdcee;
-    --accent: #6366f1;
-    --accent-soft: rgba(99, 102, 241, 0.1);
-    --text-primary: #0f0f1c;
-    --text-secondary: #4a4a6e;
-    --text-muted: #9090b8;
-    --border-subtle: rgba(0, 0, 0, 0.06);
-    --border-default: rgba(0, 0, 0, 0.12);
-    --color-bgonair: #059669;
-    --color-investor: #d97706;
+    --bg: #ffffff;
+    --bg-sidebar: #f9f9f8;
+    --bg-hover: #f0f0ee;
+    --bg-active: #eaeae8;
+    --text: #1a1a1a;
+    --text-secondary: #616161;
+    --text-muted: #a0a0a0;
+    --border: #e8e8e6;
+    --link: #4f5dd6;
+    --source-a: #16a34a;
+    --source-b: #ca8a04;
   }
 
   body {
-    background-color: var(--bg-base);
-    color: var(--text-primary);
+    background: var(--bg);
+    color: var(--text);
   }
 }
 
-/* Thin, elegant scrollbars */
+/* Prose colors — follow theme automatically */
+.prose {
+  --tw-prose-body: var(--text-secondary);
+  --tw-prose-headings: var(--text);
+  --tw-prose-bold: var(--text);
+  --tw-prose-links: var(--link);
+  --tw-prose-counters: var(--text-muted);
+  --tw-prose-bullets: var(--text-muted);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--text-secondary);
+  --tw-prose-quote-borders: var(--border);
+  --tw-prose-code: var(--text);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
+  background: var(--border);
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--text-muted);
 }

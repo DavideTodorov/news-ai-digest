@@ -4,6 +4,7 @@ import { getDigestContent, getDigestDates } from '@/lib/db'
 import { Sidebar } from '@/components/sidebar'
 import { DigestContent } from '@/components/digest-content'
 import { AppShell } from '@/components/app-shell'
+import { ScrollContent } from '@/components/scroll-content'
 import { formatDate } from '@/lib/utils'
 
 export const revalidate = 3600
@@ -77,7 +78,7 @@ export default async function DigestPage({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto">
+      <ScrollContent>
         <div className="max-w-2xl mx-auto px-4 sm:px-10 pt-8 sm:pt-10 pb-24">
           <p
             className="text-xs font-medium uppercase tracking-wider mb-8"
@@ -87,7 +88,7 @@ export default async function DigestPage({
           </p>
           <DigestContent content={content} />
         </div>
-      </div>
+      </ScrollContent>
     </AppShell>
   )
 }

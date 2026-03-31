@@ -4,7 +4,7 @@ import { getDigestContent, getDigestDates } from '@/lib/db'
 import { Sidebar } from '@/components/sidebar'
 import { DigestContent } from '@/components/digest-content'
 import { AppShell } from '@/components/app-shell'
-import { formatDate } from '@/lib/utils'
+import { formatDateFull } from '@/lib/utils'
 
 export const revalidate = 3600
 
@@ -37,7 +37,7 @@ export default async function DigestPage({
     <AppShell sidebar={<Sidebar dates={dates} currentSource={source} currentDate={date} />}>
       {/* Tabs */}
       <div
-        className="flex-shrink-0 flex items-end px-4 sm:px-10 h-12"
+        className="flex-shrink-0 flex items-end px-4 sm:px-10 h-14 gap-1"
         style={{ borderBottom: '1px solid var(--border)' }}
       >
         {VALID_SOURCES.map((s) => {
@@ -48,7 +48,7 @@ export default async function DigestPage({
             return (
               <span
                 key={s}
-                className="px-3 pb-3 text-[13px] cursor-not-allowed select-none"
+                className="px-4 pb-3.5 text-[13px] cursor-not-allowed select-none"
                 style={{ color: 'var(--text-muted)' }}
                 title="No digest for this date"
               >
@@ -61,13 +61,13 @@ export default async function DigestPage({
             <Link
               key={s}
               href={`/${s}/${date}`}
-              className="px-3 pb-3 text-[13px] font-medium relative transition-colors duration-100"
+              className="px-4 pb-3.5 text-[13px] font-medium relative transition-colors duration-100"
               style={{ color: isActive ? 'var(--text)' : 'var(--text-secondary)' }}
             >
               {SOURCE_LABELS[s]}
               {isActive && (
                 <span
-                  className="absolute bottom-0 left-3 right-3 h-[1.5px] rounded-full"
+                  className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full"
                   style={{ background: 'var(--text)' }}
                 />
               )}
@@ -78,13 +78,26 @@ export default async function DigestPage({
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-2xl mx-auto px-4 sm:px-10 pt-8 sm:pt-10 pb-24">
-          <p
-            className="text-xs font-medium uppercase tracking-wider mb-8"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            {formatDate(date)}
-          </p>
+        <div className="content-enter max-w-2xl mx-auto px-4 sm:px-10 pt-10 sm:pt-14 pb-28">
+          {/* Editorial date header */}
+          <header className="mb-10 pb-8" style={{ borderBottom: '1px solid var(--border)' }}>
+            <p
+              className="text-[10px] font-medium uppercase tracking-[0.14em] mb-3"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              Daily Digest
+            </p>
+            <h1
+              className="text-3xl sm:text-4xl font-semibold leading-tight"
+              style={{
+                fontFamily: "var(--font-serif), Georgia, serif",
+                color: 'var(--text)',
+                letterSpacing: '-0.02em',
+              }}
+            >
+              {formatDateFull(date)}
+            </h1>
+          </header>
           <DigestContent content={content} />
         </div>
       </div>

@@ -37,27 +37,18 @@ export function Sidebar({ dates, currentSource, currentDate }: Props) {
     >
       {/* Brand */}
       <div className="px-5 pt-6 pb-5" style={{ borderBottom: '1px solid var(--border)' }}>
-        <h1 className="text-sm font-semibold tracking-tight" style={{ color: 'var(--text)' }}>
+        <h1
+          className="text-sm font-semibold tracking-tight"
+          style={{
+            fontFamily: "var(--font-serif), Georgia, serif",
+            color: 'var(--text)',
+          }}
+        >
           News Digest
         </h1>
         <p className="text-[11px] mt-1" style={{ color: 'var(--text-muted)' }}>
           AI-powered summaries
         </p>
-      </div>
-
-      {/* Legend */}
-      <div
-        className="px-5 py-2.5 flex gap-4"
-        style={{ borderBottom: '1px solid var(--border)' }}
-      >
-        <span className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--source-a)' }} />
-          BG
-        </span>
-        <span className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--source-b)' }} />
-          INV
-        </span>
       </div>
 
       {/* Dates */}
@@ -70,13 +61,13 @@ export function Sidebar({ dates, currentSource, currentDate }: Props) {
             >
               {formatMonth(monthKey)}
             </p>
-            {monthDates.map(({ date, sources }) => {
+            {monthDates.map(({ date }) => {
               const active = date === currentDate
               return (
                 <Link
                   key={date}
                   href={`/${currentSource}/${date}`}
-                  className="flex items-center justify-between px-5 py-[6px] text-[13px] relative transition-colors duration-100"
+                  className="flex items-center px-5 py-[7px] text-[13px] relative transition-colors duration-100"
                   style={{
                     color: active ? 'var(--text)' : 'var(--text-secondary)',
                     background: active ? 'var(--bg-active)' : undefined,
@@ -84,25 +75,11 @@ export function Sidebar({ dates, currentSource, currentDate }: Props) {
                 >
                   {active && (
                     <span
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-4 rounded-r-sm"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-5 rounded-r-full"
                       style={{ background: 'var(--text)' }}
                     />
                   )}
                   <span className="tabular-nums">{formatDateShort(date)}</span>
-                  <span className="flex gap-1.5">
-                    <span
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{
-                        background: sources.includes('bgonair') ? 'var(--source-a)' : 'transparent',
-                      }}
-                    />
-                    <span
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{
-                        background: sources.includes('investor') ? 'var(--source-b)' : 'transparent',
-                      }}
-                    />
-                  </span>
                 </Link>
               )
             })}

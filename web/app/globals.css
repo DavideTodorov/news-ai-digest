@@ -10,27 +10,27 @@ body {
 @layer base {
   :root {
     --bg: #111111;
-    --bg-sidebar: #171717;
-    --bg-hover: #1f1f1f;
-    --bg-active: #252525;
-    --text: #e8e8e8;
-    --text-secondary: #999999;
-    --text-muted: #555555;
-    --border: #252525;
+    --bg-sidebar: #161616;
+    --bg-hover: #1e1e1e;
+    --bg-active: #222222;
+    --text: #ebebeb;
+    --text-secondary: #909090;
+    --text-muted: #4a4a4a;
+    --border: #242424;
     --link: #93a3f8;
     --source-a: #4ade80;
     --source-b: #fbbf24;
   }
 
   .light {
-    --bg: #ffffff;
-    --bg-sidebar: #f9f9f8;
-    --bg-hover: #f0f0ee;
-    --bg-active: #eaeae8;
+    --bg: #fafaf8;
+    --bg-sidebar: #f4f4f2;
+    --bg-hover: #ececea;
+    --bg-active: #e6e6e4;
     --text: #1a1a1a;
-    --text-secondary: #616161;
-    --text-muted: #a0a0a0;
-    --border: #e8e8e6;
+    --text-secondary: #5a5a5a;
+    --text-muted: #aaaaaa;
+    --border: #e2e2e0;
     --link: #4f5dd6;
     --source-a: #16a34a;
     --source-b: #ca8a04;
@@ -42,7 +42,8 @@ body {
   }
 }
 
-/* Prose colors — follow theme automatically */
+/* ── Prose ─────────────────────────────────────────────── */
+
 .prose {
   --tw-prose-body: var(--text-secondary);
   --tw-prose-headings: var(--text);
@@ -58,16 +59,120 @@ body {
   --tw-prose-td-borders: var(--border);
 }
 
-/* Scrollbar */
+/* Serif headings */
+.prose h2,
+.prose h3 {
+  font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.prose h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 2.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.prose h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  font-style: italic;
+  margin-top: 1.75rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Blockquote */
+.prose blockquote {
+  border-left: 2px solid var(--border);
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  padding: 0.1rem 0 0.1rem 1.25rem;
+  margin-left: 0;
+  font-style: italic;
+  color: var(--text-secondary);
+  background: none;
+  border-radius: 0;
+}
+
+.prose blockquote p::before,
+.prose blockquote p::after {
+  content: none;
+}
+
+/* Horizontal rule — narrow centered ornament */
+.prose hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  width: 4rem;
+  margin: 2.75rem auto;
+}
+
+/* Links — no underline by default, reveal on hover */
+.prose a {
+  color: var(--link);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.prose a:hover {
+  border-bottom-color: color-mix(in srgb, var(--link) 50%, transparent);
+}
+
+/* Code */
+.prose code {
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+.prose code::before,
+.prose code::after {
+  content: none;
+}
+
+/* Body text */
+.prose p {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+}
+
+.prose li {
+  font-size: 0.9375rem;
+  line-height: 1.75;
+}
+
+/* ── Content entrance animation ─────────────────────────── */
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-enter {
+  animation: contentFadeIn 0.35s ease both;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 3px;
+  border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);

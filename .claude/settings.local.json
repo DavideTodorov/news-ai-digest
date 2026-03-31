@@ -11,7 +11,9 @@
       "Bash(mv Dockerfile.summariser_bnt Dockerfile_summariser_bnt)",
       "Bash(mv Dockerfile.summariser_investor Dockerfile_summariser_investor)",
       "WebFetch(domain:www.anthropic.com)",
-      "WebFetch(domain:claude.com)"
+      "WebFetch(domain:claude.com)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

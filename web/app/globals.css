@@ -64,6 +64,10 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
+.prose h3 {
+  font-size: 1.2rem;
+}
+
 /* Sidebar link hover */
 .sidebar-link:hover {
   background: var(--bg-hover);

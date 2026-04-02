@@ -45,6 +45,11 @@ def run():
         mark_summarised(conn, article_ids)
         conn.commit()
 
+        discord_enabled = os.getenv("ENABLE_DISCORD", "true").lower() == "true"
+        if not discord_enabled:
+            log.info("Discord notifications disabled via ENABLE_DISCORD flag")
+            return
+
         webhook_url = os.getenv("DISCORD_WEBHOOK_INVESTOR")
         if not webhook_url:
             log.warning("DISCORD_WEBHOOK_INVESTOR not set, skipping Discord notification")

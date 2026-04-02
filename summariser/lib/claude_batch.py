@@ -10,22 +10,24 @@ client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 def build_articles_text(articles):
     lines = []
-    for _, title, url, content in articles:
-        lines.append(f"Title: {title}\nURL: {url}\nContent: {content}\n")
+    for _, title, url, content, published_local in articles:
+        time_str = published_local.strftime("%H:%M") if published_local else ""
+        lines.append(f"Time: {time_str}\nTitle: {title}\nURL: {url}\nContent: {content}\n")
     return "\n---\n".join(lines)
 
 
-def submit_batch(articles_text, target_date, source_name, system_prompt, date_label="yesterday's"):
+def submit_batch(articles_text, target_date, source_name, system_prompt, article_count=0):
     batch = client.messages.batches.create(
         requests=[{
             "custom_id": f"{source_name}-digest-{target_date}",
             "params": {
                 "model": "claude-sonnet-4-6",
                 "max_tokens": 8192,
+                "temperature": 0,
                 "system": system_prompt,
                 "messages": [{
                     "role": "user",
-                    "content": f"Here are {date_label} {source_name} articles ({target_date}):\n\n{articles_text}"
+                    "content": f"Here are {article_count} {source_name} articles from {target_date}:\n\n{articles_text}"
                 }]
             }
         }]

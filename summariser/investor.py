@@ -33,7 +33,7 @@ def run():
         article_ids = [a[0] for a in articles]
 
         prompt = INVESTOR_PROMPT_WEEKDAY if is_weekday else INVESTOR_PROMPT_WEEKEND
-        batch_id = submit_batch(build_articles_text(articles), yesterday, "investor", prompt)
+        batch_id = submit_batch(build_articles_text(articles), yesterday, "investor", prompt, len(articles))
         log.info(f"Batch submitted: {batch_id}")
 
         digest = poll_batch(batch_id)

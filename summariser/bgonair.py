@@ -31,7 +31,7 @@ def run():
         log.info(f"Found {len(articles)} articles to summarise")
         article_ids = [a[0] for a in articles]
 
-        batch_id = submit_batch(build_articles_text(articles), yesterday, "bgonair", BGONAIR_PROMPT)
+        batch_id = submit_batch(build_articles_text(articles), yesterday, "bgonair", BGONAIR_PROMPT, len(articles))
         log.info(f"Batch submitted: {batch_id}")
 
         digest = poll_batch(batch_id)

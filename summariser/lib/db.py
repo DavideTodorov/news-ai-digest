@@ -12,7 +12,8 @@ def get_connection():
 def fetch_articles(conn, feed_source, target_date):
     with conn.cursor() as cur:
         cur.execute("""
-            SELECT id, title, url, content
+            SELECT id, title, url, content,
+                   published_at AT TIME ZONE 'Europe/Sofia' AS published_local
             FROM articles
             WHERE feed_source = %s
               AND DATE(published_at AT TIME ZONE 'Europe/Sofia') = %s

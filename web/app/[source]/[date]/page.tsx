@@ -27,7 +27,7 @@ export default async function DigestPage({
 
   const [content, initialDates, totalCount] = await Promise.all([
     getDigestContent(date, source),
-    getDigestDates(30, 0),
+    getDigestDates(10, 0),
     getDigestCount(),
   ])
 

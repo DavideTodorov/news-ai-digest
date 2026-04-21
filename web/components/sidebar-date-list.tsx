@@ -6,7 +6,7 @@ import type { DigestDate } from '@/lib/db'
 import { formatDateShort } from '@/lib/utils'
 import { SidebarScrollToActive } from '@/components/sidebar-scroll-active'
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = 30
 
 type Props = {
   initialDates: DigestDate[]

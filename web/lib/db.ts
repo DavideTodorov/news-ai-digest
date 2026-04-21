@@ -21,7 +21,7 @@ export type DigestDate = {
   sources: string[]
 }
 
-export async function getDigestDates(limit = 10, offset = 0): Promise<DigestDate[]> {
+export async function getDigestDates(limit = 30, offset = 0): Promise<DigestDate[]> {
   const rows = await sql<{ date: string; sources: string[] }[]>`
     SELECT date::text, array_agg(source ORDER BY source) AS sources
     FROM digests

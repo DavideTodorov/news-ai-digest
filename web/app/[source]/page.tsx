@@ -1,7 +1,6 @@
 import { redirect, notFound } from 'next/navigation'
 import { getLatestDate } from '@/lib/db'
-
-const VALID_SOURCES = ['bgonair', 'investor']
+import { isValidSource } from '@/lib/sources'
 
 export default async function SourcePage({
   params,
@@ -10,7 +9,7 @@ export default async function SourcePage({
 }) {
   const { source } = await params
 
-  if (!VALID_SOURCES.includes(source)) notFound()
+  if (!isValidSource(source)) notFound()
 
   const latestDate = await getLatestDate(source)
   if (!latestDate) notFound()

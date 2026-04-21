@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getDigestContent, getDigestCount, getDigestDates, getDigestEntry } from '@/lib/db'
+import { DIGEST_PAGE_SIZE } from '@/lib/constants'
 import { SOURCE_CONFIG, VALID_SOURCES, isValidSource } from '@/lib/sources'
+import { parseDateline } from '@/lib/utils'
 import { Sidebar } from '@/components/sidebar'
 import { DigestContent } from '@/components/digest-content'
 import { AppShell } from '@/components/app-shell'
@@ -20,7 +22,7 @@ export default async function DigestPage({
 
   const [content, initialDates, totalCount] = await Promise.all([
     getDigestContent(date, source),
-    getDigestDates(30, 0),
+    getDigestDates(DIGEST_PAGE_SIZE, 0),
     getDigestCount(),
   ])
 
@@ -30,10 +32,7 @@ export default async function DigestPage({
     initialDates.find((d) => d.date === date) ?? (await getDigestEntry(date))
   const initialHasMore = initialDates.length < totalCount
 
-  const parsed = new Date(date + 'T00:00:00')
-  const weekday = parsed.toLocaleDateString('en-GB', { weekday: 'long' })
-  const dayMonth = parsed.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
-  const year = parsed.getFullYear()
+  const { weekday, dayMonth, year } = parseDateline(date)
 
   return (
     <AppShell

@@ -16,12 +16,14 @@ if (process.env.NODE_ENV !== 'production') globalThis._sql = sql
 
 export default sql
 
+import { DIGEST_PAGE_SIZE } from './constants'
+
 export type DigestDate = {
   date: string
   sources: string[]
 }
 
-export async function getDigestDates(limit = 30, offset = 0): Promise<DigestDate[]> {
+export async function getDigestDates(limit = DIGEST_PAGE_SIZE, offset = 0): Promise<DigestDate[]> {
   const rows = await sql<{ date: string; sources: string[] }[]>`
     SELECT date::text, array_agg(source ORDER BY source) AS sources
     FROM digests

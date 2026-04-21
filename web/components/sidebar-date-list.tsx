@@ -3,11 +3,10 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import type { DigestDate } from '@/lib/db'
+import { DIGEST_PAGE_SIZE } from '@/lib/constants'
 import { formatDateShort } from '@/lib/utils'
 import { SOURCE_CONFIG, isValidSource } from '@/lib/sources'
 import { SidebarScrollToActive } from '@/components/sidebar-scroll-active'
-
-const PAGE_SIZE = 30
 
 type Props = {
   initialDates: DigestDate[]
@@ -56,7 +55,7 @@ export function SidebarDateList({
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const next: DigestDate[] = await res.json()
       setDates((prev) => [...prev, ...next])
-      if (next.length < PAGE_SIZE) setHasMore(false)
+      if (next.length < DIGEST_PAGE_SIZE) setHasMore(false)
     } catch (e) {
       setError('Failed to load — tap to retry')
       console.error(e)

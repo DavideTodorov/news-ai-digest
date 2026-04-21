@@ -1,36 +1,15 @@
-import Link from 'next/link'
 import type { DigestDate } from '@/lib/db'
-import { formatDateShort } from '@/lib/utils'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { SidebarScrollToActive } from '@/components/sidebar-scroll-active'
+import { SidebarDateList } from '@/components/sidebar-date-list'
 
 type Props = {
-  dates: DigestDate[]
+  initialDates: DigestDate[]
+  initialHasMore: boolean
   currentSource: string
   currentDate: string
 }
 
-function groupByMonth(dates: DigestDate[]): [string, DigestDate[]][] {
-  const map = new Map<string, DigestDate[]>()
-  for (const d of dates) {
-    const key = d.date.slice(0, 7)
-    if (!map.has(key)) map.set(key, [])
-    map.get(key)!.push(d)
-  }
-  return Array.from(map.entries())
-}
-
-function formatMonth(key: string): string {
-  const [y, m] = key.split('-')
-  return new Date(parseInt(y), parseInt(m) - 1, 1).toLocaleDateString('en-GB', {
-    month: 'long',
-    year: 'numeric',
-  })
-}
-
-export function Sidebar({ dates, currentSource, currentDate }: Props) {
-  const grouped = groupByMonth(dates)
-
+export function Sidebar({ initialDates, initialHasMore, currentSource, currentDate }: Props) {
   return (
     <aside
       className="w-52 flex-shrink-0 flex flex-col h-full overflow-hidden"
@@ -47,42 +26,12 @@ export function Sidebar({ dates, currentSource, currentDate }: Props) {
       </div>
 
       {/* Dates */}
-      <nav className="flex-1 overflow-y-auto py-1 min-h-0">
-        <SidebarScrollToActive />
-        {grouped.map(([monthKey, monthDates]) => (
-          <div key={monthKey}>
-            <p
-              className="px-5 pt-4 pb-1 text-[10px] font-medium uppercase tracking-wider select-none"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              {formatMonth(monthKey)}
-            </p>
-            {monthDates.map(({ date }) => {
-              const active = date === currentDate
-              return (
-                <Link
-                  key={date}
-                  href={`/${currentSource}/${date}`}
-                  data-sidebar-active={active || undefined}
-                  className="sidebar-link flex items-center px-5 py-[6px] text-[13px] relative transition-colors duration-100"
-                  style={{
-                    color: active ? 'var(--text)' : 'var(--text-secondary)',
-                    background: active ? 'var(--bg-active)' : undefined,
-                  }}
-                >
-                  {active && (
-                    <span
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-4 rounded-r-sm"
-                      style={{ background: 'var(--text)' }}
-                    />
-                  )}
-                  <span className="tabular-nums">{formatDateShort(date)}</span>
-                </Link>
-              )
-            })}
-          </div>
-        ))}
-      </nav>
+      <SidebarDateList
+        initialDates={initialDates}
+        initialHasMore={initialHasMore}
+        currentSource={currentSource}
+        currentDate={currentDate}
+      />
 
       {/* Footer */}
       <div

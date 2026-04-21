@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getDigestContent, getDigestDates } from '@/lib/db'
+import { getDigestContent, getDigestCount, getDigestDates, getDigestEntry } from '@/lib/db'
 import { Sidebar } from '@/components/sidebar'
 import { DigestContent } from '@/components/digest-content'
 import { AppShell } from '@/components/app-shell'
@@ -25,17 +25,29 @@ export default async function DigestPage({
 
   if (!VALID_SOURCES.includes(source)) notFound()
 
-  const [content, dates] = await Promise.all([
+  const [content, initialDates, totalCount] = await Promise.all([
     getDigestContent(date, source),
-    getDigestDates(),
+    getDigestDates(30, 0),
+    getDigestCount(),
   ])
 
   if (!content) notFound()
 
-  const dateEntry = dates.find((d) => d.date === date)
+  const dateEntry =
+    initialDates.find((d) => d.date === date) ?? (await getDigestEntry(date))
+  const initialHasMore = initialDates.length < totalCount
 
   return (
-    <AppShell sidebar={<Sidebar dates={dates} currentSource={source} currentDate={date} />}>
+    <AppShell
+      sidebar={
+        <Sidebar
+          initialDates={initialDates}
+          initialHasMore={initialHasMore}
+          currentSource={source}
+          currentDate={date}
+        />
+      }
+    >
       {/* Tabs */}
       <div
         className="flex-shrink-0 flex items-end px-4 sm:px-10 h-12"

@@ -21,15 +21,31 @@ export type DigestDate = {
   sources: string[]
 }
 
-export async function getDigestDates(): Promise<DigestDate[]> {
+export async function getDigestDates(limit = 30, offset = 0): Promise<DigestDate[]> {
   const rows = await sql<{ date: string; sources: string[] }[]>`
     SELECT date::text, array_agg(source ORDER BY source) AS sources
     FROM digests
     GROUP BY date
     ORDER BY date DESC
-    LIMIT 90
+    LIMIT ${limit} OFFSET ${offset}
   `
   return rows
+}
+
+export async function getDigestCount(): Promise<number> {
+  const rows = await sql<{ count: string }[]>`SELECT COUNT(DISTINCT date) FROM digests`
+  return parseInt(rows[0].count)
+}
+
+export async function getDigestEntry(date: string): Promise<DigestDate | null> {
+  const rows = await sql<{ date: string; sources: string[] }[]>`
+    SELECT date::text, array_agg(source ORDER BY source) AS sources
+    FROM digests
+    WHERE date = ${date}
+    GROUP BY date
+    LIMIT 1
+  `
+  return rows[0] ?? null
 }
 
 export async function getDigestContent(

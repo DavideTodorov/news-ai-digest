@@ -45,85 +45,65 @@ export default async function DigestPage({
         />
       }
     >
-      {/* Source pills */}
-      <div className="flex-shrink-0 flex items-center gap-2 px-4 sm:px-10 h-16">
-        {VALID_SOURCES.map((s) => {
-          const available = dateEntry?.sources.includes(s) ?? false
-          const isActive = s === source
-          const cfg = SOURCE_CONFIG[s]
-
-          if (!available && !isActive) {
-            return (
-              <span
-                key={s}
-                className="px-3.5 py-1.5 rounded-full text-[12.5px] font-medium select-none opacity-50 line-through"
-                style={{ color: 'var(--text-muted)' }}
-                title="No digest for this date"
-              >
-                {cfg.label}
-              </span>
-            )
-          }
-
-          return (
-            <Link
-              key={s}
-              href={`/${s}/${date}`}
-              aria-current={isActive ? 'page' : undefined}
-              className="px-3.5 py-1.5 rounded-full text-[12.5px] font-medium transition-all duration-150 hover:-translate-y-[1px]"
-              style={{
-                background: isActive ? cfg.bg : 'transparent',
-                color: isActive ? cfg.color : 'var(--text-secondary)',
-                border: `1px solid ${isActive ? 'transparent' : 'var(--border)'}`,
-                boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
-              }}
-            >
-              {cfg.label}
-            </Link>
-          )
-        })}
-      </div>
-
-      {/* Content */}
+      {/* Content — a single calm reading column, content as the hero */}
       <ScrollContent>
-        <div className="max-w-3xl mx-auto px-4 sm:px-8 pt-4 sm:pt-6 pb-24">
-          {/* Masthead dateline */}
-          <header className="mb-7 sm:mb-9 px-1">
-            <div className="flex items-baseline justify-between gap-4">
-              <p
-                className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-                style={{ color: 'var(--accent)' }}
-              >
-                {weekday}
-              </p>
-              <p
-                className="text-[10.5px] font-medium uppercase tracking-[0.18em] whitespace-nowrap"
-                style={{ color: 'var(--text-muted)' }}
-              >
-                {SOURCE_CONFIG[source].label}
-              </p>
-            </div>
+        <div className="max-w-[680px] mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-32">
+          {/* Dateline + quiet source switch */}
+          <header className="mb-9 sm:mb-11">
+            <p
+              className="text-[11px] font-semibold uppercase tracking-[0.18em]"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              {weekday}
+            </p>
             <h1
-              className="mt-1.5 text-[34px] sm:text-[44px] leading-[1.05] font-medium tracking-tight"
+              className="mt-1 text-[26px] sm:text-[32px] leading-[1.1] font-medium tracking-tight"
               style={{ color: 'var(--text)', fontFamily: 'var(--font-display), Georgia, serif', fontStyle: 'italic' }}
             >
               {dayMonth}
               <span className="ml-2 not-italic" style={{ color: 'var(--text-muted)' }}>{year}</span>
             </h1>
-            <div className="mt-4 h-px" style={{ background: 'var(--border-strong)' }} />
+
+            <nav className="mt-4 flex items-center gap-4 text-[12.5px]" aria-label="Source">
+              {VALID_SOURCES.map((s) => {
+                const available = dateEntry?.sources.includes(s) ?? false
+                const isActive = s === source
+                const cfg = SOURCE_CONFIG[s]
+
+                if (!available && !isActive) {
+                  return (
+                    <span
+                      key={s}
+                      className="select-none opacity-50 line-through"
+                      style={{ color: 'var(--text-muted)' }}
+                      title="No digest for this date"
+                    >
+                      {cfg.label}
+                    </span>
+                  )
+                }
+
+                return (
+                  <Link
+                    key={s}
+                    href={`/${s}/${date}`}
+                    aria-current={isActive ? 'page' : undefined}
+                    className="transition-colors duration-150 hover:opacity-80"
+                    style={{
+                      color: isActive ? cfg.color : 'var(--text-muted)',
+                      fontWeight: isActive ? 600 : 400,
+                    }}
+                  >
+                    {cfg.label}
+                  </Link>
+                )
+              })}
+            </nav>
+
+            <div className="mt-5 h-px" style={{ background: 'var(--border)' }} />
           </header>
 
-          {/* Digest card */}
-          <article
-            className="rounded-2xl p-6 sm:p-10"
-            style={{
-              background: 'var(--bg-card)',
-              boxShadow: 'var(--shadow)',
-              border: '1px solid var(--border)',
-            }}
-          >
-            <DigestContent content={content} />
-          </article>
+          <DigestContent content={content} />
         </div>
       </ScrollContent>
     </AppShell>

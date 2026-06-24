@@ -15,8 +15,8 @@ export function Sidebar({ initialDates, initialHasMore, currentSource, currentDa
       className="w-64 flex-shrink-0 flex flex-col h-full overflow-hidden"
       style={{
         background: 'var(--bg-sidebar)',
-        backdropFilter: 'blur(20px) saturate(140%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(140%)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
         borderRight: '1px solid var(--border)',
       }}
     >
@@ -25,8 +25,8 @@ export function Sidebar({ initialDates, initialHasMore, currentSource, currentDa
         <div
           className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{
-            background: 'linear-gradient(135deg, var(--accent), var(--source-investor))',
-            boxShadow: 'var(--shadow-sm)',
+            background: 'var(--accent-bg)',
+            color: 'var(--accent)',
           }}
         >
           <svg
@@ -34,7 +34,7 @@ export function Sidebar({ initialDates, initialHasMore, currentSource, currentDa
             height="14"
             viewBox="0 0 14 14"
             fill="none"
-            stroke="white"
+            stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"

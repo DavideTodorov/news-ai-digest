@@ -70,7 +70,7 @@ body {
   }
 }
 
-/* Prose — warm modern reading */
+/* Prose — an edition you read, not UI text */
 .prose {
   --tw-prose-body: var(--text-secondary);
   --tw-prose-headings: var(--text);
@@ -84,30 +84,58 @@ body {
   --tw-prose-code: var(--text);
   --tw-prose-th-borders: var(--border);
   --tw-prose-td-borders: var(--border);
+  font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
+  font-optical-sizing: auto;
+}
+
+/* Read better: balanced headings, tidy paragraphs.
+   Headings stay in the reading serif (full Cyrillic), weighted up. */
+.prose :is(h1, h2, h3, h4) {
+  font-family: var(--font-serif), Georgia, serif;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.prose p,
+.prose li {
+  text-wrap: pretty;
 }
 
 .prose h2 {
   position: relative;
-  padding-left: 0.85rem;
-  margin-top: 2.5rem;
+  padding-left: 0.95rem;
   border-bottom: none;
   padding-bottom: 0;
+  font-weight: 600;
 }
 .prose h2::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 0.28em;
-  bottom: 0.28em;
+  top: 0.2em;
+  bottom: 0.2em;
   width: 3px;
   border-radius: 2px;
-  background: var(--accent);
+  background: linear-gradient(var(--accent), var(--source-investor));
 }
 
 .prose h3 {
-  font-size: 1.1rem;
-  margin-top: 1.8rem;
+  font-weight: 600;
   color: var(--text);
+}
+
+/* The opening line gets a printed-edition lead-in */
+.prose > p:first-of-type {
+  color: var(--text);
+  font-size: 1.075em;
+}
+.prose > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 600;
+  font-size: 3.1em;
+  line-height: 0.82;
+  padding: 0.06em 0.12em 0 0;
+  color: var(--accent);
 }
 
 .prose a {

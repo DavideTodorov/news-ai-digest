@@ -87,22 +87,31 @@ export default async function DigestPage({
       {/* Content */}
       <ScrollContent>
         <div className="max-w-3xl mx-auto px-4 sm:px-8 pt-4 sm:pt-6 pb-24">
-          {/* Dateline */}
-          <div className="mb-6 sm:mb-8 px-1">
-            <p
-              className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-              style={{ color: 'var(--accent)' }}
-            >
-              {weekday}
-            </p>
+          {/* Masthead dateline */}
+          <header className="mb-7 sm:mb-9 px-1">
+            <div className="flex items-baseline justify-between gap-4">
+              <p
+                className="text-[11px] font-semibold uppercase tracking-[0.18em]"
+                style={{ color: 'var(--accent)' }}
+              >
+                {weekday}
+              </p>
+              <p
+                className="text-[10.5px] font-medium uppercase tracking-[0.18em] whitespace-nowrap"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                {SOURCE_CONFIG[source].label}
+              </p>
+            </div>
             <h1
-              className="mt-1.5 text-3xl sm:text-[40px] leading-[1.1] font-medium tracking-tight"
-              style={{ color: 'var(--text)', fontFamily: 'var(--font-serif), Georgia, serif', fontStyle: 'italic' }}
+              className="mt-1.5 text-[34px] sm:text-[44px] leading-[1.05] font-medium tracking-tight"
+              style={{ color: 'var(--text)', fontFamily: 'var(--font-display), Georgia, serif', fontStyle: 'italic' }}
             >
               {dayMonth}
-              <span className="ml-2" style={{ color: 'var(--text-muted)' }}>{year}</span>
+              <span className="ml-2 not-italic" style={{ color: 'var(--text-muted)' }}>{year}</span>
             </h1>
-          </div>
+            <div className="mt-4 h-px" style={{ background: 'var(--border-strong)' }} />
+          </header>
 
           {/* Digest card */}
           <article

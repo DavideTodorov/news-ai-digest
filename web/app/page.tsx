@@ -3,7 +3,9 @@ import { getDigestDates } from '@/lib/db'
 import { resolveSource } from '@/lib/sources'
 import { EmptyState } from '@/components/empty-state'
 
-export const revalidate = 3600
+// This route exists to resolve a redirect from whatever is in the database
+// right now, so there is nothing to prerender — and the build has no database.
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   // Resolve the landing page from what is actually in the database rather than

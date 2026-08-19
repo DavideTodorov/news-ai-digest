@@ -108,6 +108,13 @@ def entry_categories(entry):
     return {t.get("term", "").strip().casefold() for t in entry.get("tags", []) if t.get("term")}
 
 
+def entry_category(entry):
+    """The feed's own section label, kept in its original casing. feedparser
+    maps the RSS <category> text onto entry["category"]; Mediapool tags every
+    item with exactly one, and feeds that tag nothing store NULL."""
+    return (entry.get("category") or "").strip() or None
+
+
 def parse_published(entry):
     if hasattr(entry, "published_parsed") and entry.published_parsed:
         return datetime.fromtimestamp(timegm(entry.published_parsed), tz=timezone.utc)
@@ -156,12 +163,13 @@ def insert_article(conn, feed_config, entry):
     with conn.cursor() as cur:
         cur.execute(
             """
-            INSERT INTO articles (article_id, feed_source, title, url, content, word_count, published_at)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO articles (article_id, feed_source, title, url, content, word_count, category, published_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (url) DO UPDATE SET
                 title = EXCLUDED.title,
                 content = EXCLUDED.content,
-                word_count = EXCLUDED.word_count
+                word_count = EXCLUDED.word_count,
+                category = EXCLUDED.category
             """,
             (
                 entry.get("id") or entry.get("guid"),
@@ -170,6 +178,7 @@ def insert_article(conn, feed_config, entry):
                 url,
                 content,
                 word_count,
+                entry_category(entry),
                 parse_published(entry),
             ),
         )

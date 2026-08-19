@@ -31,6 +31,6 @@ ORDER BY avg_length DESC;
 -- Check the latest articles
 SELECT *
 FROM articles
-WHERE feed_source = 'BGonAir'
+WHERE feed_source = 'Mediapool'
   AND published_at::date = CURRENT_DATE
 ORDER BY fetched_at DESC;

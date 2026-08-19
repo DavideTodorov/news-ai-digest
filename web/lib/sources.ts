@@ -1,4 +1,10 @@
 export const SOURCE_CONFIG = {
+  mediapool: {
+    label: 'Mediapool',
+    color: 'var(--source-mediapool)',
+    bg: 'var(--source-mediapool-bg)',
+  },
+  // Retained so archived digests fetched before the Mediapool swap still resolve.
   bgonair: {
     label: 'BGonAir',
     color: 'var(--source-bgonair)',

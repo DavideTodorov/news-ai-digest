@@ -28,6 +28,8 @@ body {
     --link: #b49cff;
     --accent: #fb7185;
     --accent-bg: rgba(251, 113, 133, 0.14);
+    --source-mediapool: #2dd4bf;
+    --source-mediapool-bg: rgba(45, 212, 191, 0.15);
     --source-bgonair: #fb7185;
     --source-bgonair-bg: rgba(251, 113, 133, 0.15);
     --source-investor: #c4b5fd;
@@ -54,6 +56,8 @@ body {
     --link: #6d52e0;
     --accent: #e85d75;
     --accent-bg: #fce7eb;
+    --source-mediapool: #0d9488;
+    --source-mediapool-bg: #ccfbf1;
     --source-bgonair: #ef4444;
     --source-bgonair-bg: #fee2e2;
     --source-investor: #8b5cf6;

@@ -6,8 +6,8 @@ Fetches Bulgarian news articles from RSS feeds, extracts full content, and gener
 
 | Service | Script | Schedule      | Description |
 |---------|--------|---------------|-------------|
-| RSS Fetcher | `fetcher/rss_fetcher.py` | Every 30 min  | Fetches articles from BGonAir and Investor.bg, extracts full content, stores in Postgres |
-| BGonAir Summariser | `summariser/bgonair.py` | Daily 2am UTC | Summarises previous day's BGonAir articles, posts to Discord |
+| RSS Fetcher | `fetcher/rss_fetcher.py` | Every 30 min  | Fetches articles from Mediapool and Investor.bg, filters out opinion pieces, extracts and cleans full content, stores in Postgres |
+| Mediapool Summariser | `summariser/mediapool.py` | Daily 2am UTC | Summarises previous day's Mediapool articles with bias-neutralising prompt, posts to Discord |
 | Investor Summariser | `summariser/investor.py` | Daily 3am UTC | Summarises previous day's Investor.bg articles, posts to Discord |
 
 ## Project Structure
@@ -23,10 +23,10 @@ news-ai-digest/
 │   │   ├── db.py             # Database helpers
 │   │   ├── claude_batch.py   # Batch API submit/poll
 │   │   └── discord.py        # Discord formatting and posting
-│   ├── bgonair.py
+│   ├── mediapool.py
 │   └── investor.py
 ├── Dockerfile_rss_fetcher
-├── Dockerfile_summariser_bgonair
+├── Dockerfile_summariser_mediapool
 ├── Dockerfile_summariser_investor
 └── analytics.sql
 ```
@@ -55,7 +55,7 @@ digests (id, date, source, content, batch_id, created_at)
 ```env
 DATABASE_URL=postgresql://user:password@host:5432/dbname
 ANTHROPIC_API_KEY=your-anthropic-api-key
-DISCORD_WEBHOOK_BGONAIR=https://discord.com/api/webhooks/...
+DISCORD_WEBHOOK_MEDIAPOOL=https://discord.com/api/webhooks/...
 DISCORD_WEBHOOK_INVESTOR=https://discord.com/api/webhooks/...
 ```
 
@@ -72,5 +72,5 @@ python -m venv .venv
 Each service is deployed separately on Railway using its own Dockerfile:
 
 - `Dockerfile_rss_fetcher`
-- `Dockerfile_summariser_bgonair`
+- `Dockerfile_summariser_mediapool`
 - `Dockerfile_summariser_investor`

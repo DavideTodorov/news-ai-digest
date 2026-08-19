@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY summariser/ .
 
-CMD ["python", "bgonair.py"]
+CMD ["python", "mediapool.py"]

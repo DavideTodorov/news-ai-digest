@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from lib.db import get_connection, fetch_articles, mark_summarised, save_digest
 from lib.claude_batch import build_articles_text, submit_batch, poll_batch
 from lib.discord import send_to_discord
-from lib.prompts import BGONAIR_PROMPT
+from lib.prompts import MEDIAPOOL_PROMPT
 
 load_dotenv()
 
@@ -19,11 +19,11 @@ SOFIA_TZ = ZoneInfo("Europe/Sofia")
 
 def run():
     yesterday = (datetime.now(SOFIA_TZ) - timedelta(days=1)).date()
-    log.info(f"Running BGonAir summariser for {yesterday}")
+    log.info(f"Running Mediapool summariser for {yesterday}")
 
     conn = get_connection()
     try:
-        articles = fetch_articles(conn, "BGonAir", yesterday)
+        articles = fetch_articles(conn, "Mediapool", yesterday)
         if not articles:
             log.info("No articles found for yesterday.")
             return
@@ -31,7 +31,7 @@ def run():
         log.info(f"Found {len(articles)} articles to summarise")
         article_ids = [a[0] for a in articles]
 
-        batch_id = submit_batch(build_articles_text(articles), yesterday, "bgonair", BGONAIR_PROMPT, len(articles))
+        batch_id = submit_batch(build_articles_text(articles), yesterday, "mediapool", MEDIAPOOL_PROMPT, len(articles))
         log.info(f"Batch submitted: {batch_id}")
 
         digest = poll_batch(batch_id)
@@ -39,7 +39,7 @@ def run():
             log.error("Batch failed or returned no results.")
             return
 
-        save_digest(conn, yesterday, "bgonair", digest, batch_id)
+        save_digest(conn, yesterday, "mediapool", digest, batch_id)
         mark_summarised(conn, article_ids)
         conn.commit()
 
@@ -48,13 +48,13 @@ def run():
             log.info("Discord notifications disabled via ENABLE_DISCORD flag")
             return
 
-        webhook_url = os.getenv("DISCORD_WEBHOOK_BGONAIR")
+        webhook_url = os.getenv("DISCORD_WEBHOOK_MEDIAPOOL")
         if not webhook_url:
-            log.warning("DISCORD_WEBHOOK_BGONAIR not set, skipping Discord notification")
+            log.warning("DISCORD_WEBHOOK_MEDIAPOOL not set, skipping Discord notification")
             return
 
         try:
-            send_to_discord(digest, yesterday, webhook_url, "📰 BGonAir", 3066993)
+            send_to_discord(digest, yesterday, webhook_url, "📰 Mediapool", 3066993)
             log.info("Discord notification sent")
         except Exception as e:
             log.error(f"Discord notification failed: {e}")

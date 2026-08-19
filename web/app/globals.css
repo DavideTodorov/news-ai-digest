@@ -99,7 +99,7 @@ body {
 @container (min-width: 1160px) {
   .reader-layout {
     display: grid;
-    grid-template-columns: 1fr minmax(0, 680px) 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 680px) minmax(0, 1fr);
     align-items: start;
   }
   .reader {
@@ -192,12 +192,16 @@ body {
   grid-column: 1;
   position: sticky;
   top: 0;
-  justify-self: end;
+  /* Out at the near edge of the margin rather than tucked against the column:
+     an index is easier to read across when it is not competing with the text
+     it points into. The padding scales with the margin so the rail keeps a
+     little air off the window at every width. */
+  justify-self: start;
   width: 100%;
-  max-width: 15rem;
+  max-width: 16.5rem;
   max-height: 100vh;
   overflow-y: auto;
-  padding: 5.5rem 1.75rem 3rem 1.5rem;
+  padding: 5.5rem 2.25rem 3rem clamp(1.25rem, 3cqi, 3.5rem);
 }
 
 .theme-rail-title {
@@ -262,8 +266,8 @@ body {
 }
 
 .digest-lede .prose p {
-  font-size: 20px;
-  line-height: 1.7;
+  font-size: 21px;
+  line-height: 1.72;
   color: var(--text);
 }
 
@@ -294,9 +298,9 @@ body {
 
 .section-heading {
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.012em;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.008em;
   color: var(--text);
   margin-bottom: 0.75rem;
 }
@@ -331,7 +335,7 @@ body {
 }
 
 .digest-outlook .prose p {
-  font-size: 17px;
+  font-size: 18px;
   color: var(--text-secondary);
 }
 
@@ -351,19 +355,35 @@ body {
   --tw-prose-th-borders: var(--border);
   --tw-prose-td-borders: var(--border);
   font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
-  font-optical-sizing: auto;
 }
 
+/* PT Serif carries more ink per line than the previous face, so the size goes
+   up and the leading opens with it: at 19px the 680px column lands around 68
+   Cyrillic characters, which is the comfortable end of the measure. */
 .prose p,
 .prose li {
-  font-size: 18px;
-  line-height: 1.78;
+  font-size: 19px;
+  line-height: 1.8;
+  letter-spacing: 0.003em;
   text-wrap: pretty;
+}
+
+/* On a phone the column is already short; 19px there would drop the measure
+   under 45 characters and the rag would start doing the reading for you. */
+@media (max-width: 480px) {
+  .prose p,
+  .prose li {
+    font-size: 18px;
+  }
+
+  .digest-lede .prose p {
+    font-size: 19.5px;
+  }
 }
 
 .prose p {
   margin-top: 0;
-  margin-bottom: 1.15rem;
+  margin-bottom: 1.25rem;
 }
 
 .prose > :last-child {
@@ -373,9 +393,9 @@ body {
 /* The cluster names are the document's real headings. */
 .prose h3 {
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 21px;
-  font-weight: 600;
-  letter-spacing: -0.012em;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.008em;
   line-height: 1.3;
   color: var(--text);
   text-wrap: balance;
@@ -390,9 +410,9 @@ body {
 
 .prose h2 {
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.012em;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.008em;
   color: var(--text);
   text-wrap: balance;
   margin-top: 2.5rem;
@@ -567,7 +587,81 @@ body {
   .drawer {
     position: relative;
     transform: none;
+    width: 16rem;
+    overflow: hidden;
+    transition: width 220ms ease, opacity 140ms ease;
   }
+
+  /* Collapsed, the archive gives its 16rem back to the reading area. The
+     aside inside keeps its own width, so nothing reflows on the way out. */
+  .drawer[data-collapsed] {
+    width: 0;
+    opacity: 0;
+  }
+}
+
+/* No transition on the first paint, or restoring a collapsed sidebar from
+   storage would play as an animation on every page load. */
+.drawer:not([data-animate]) {
+  transition: none;
+}
+
+.drawer-collapse {
+  position: absolute;
+  top: 1.4rem;
+  right: 0.6rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  opacity: 0;
+  transition: opacity 140ms;
+}
+
+@media (min-width: 768px) {
+  .drawer-collapse {
+    display: flex;
+  }
+}
+
+.drawer:hover .drawer-collapse,
+.drawer-collapse:focus-visible {
+  opacity: 1;
+}
+
+.sidebar-reveal {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.75rem;
+  z-index: 15;
+  width: 2rem;
+  height: 2rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  color: var(--text-muted);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms 120ms, color 120ms, background 120ms;
+}
+
+@media (min-width: 768px) {
+  .sidebar-reveal {
+    display: flex;
+  }
+}
+
+.sidebar-reveal[data-visible] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-reveal:hover {
+  color: var(--text);
+  background: var(--bg-hover);
 }
 
 .drawer-scrim {

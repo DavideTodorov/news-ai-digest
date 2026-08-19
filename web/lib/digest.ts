@@ -37,8 +37,8 @@ export type Digest = {
 const H1 = /^#\s+(.+?)\s*$/
 const H3 = /^###\s+(.+?)\s*$/
 
-/** Dense news prose, read attentively rather than skimmed. */
-const WORDS_PER_MINUTE = 200
+/** Dense news prose in Bulgarian, read attentively rather than skimmed. */
+const WORDS_PER_MINUTE = 130
 
 export function parseDigest(markdown: string): Digest {
   const sections: Section[] = []

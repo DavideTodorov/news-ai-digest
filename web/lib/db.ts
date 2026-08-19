@@ -71,3 +71,40 @@ export async function getLatestDate(source: string): Promise<string | null> {
   `
   return rows[0]?.date ?? null
 }
+
+export type Neighbours = {
+  previous: string | null
+  next: string | null
+}
+
+/**
+ * The dates either side of `date` that this source actually published, so the
+ * reader can walk the archive a day at a time without landing on a 404.
+ */
+export async function getNeighbouringDates(
+  date: string,
+  source: string
+): Promise<Neighbours> {
+  const rows = await sql<{ previous: string | null; next: string | null }[]>`
+    SELECT
+      (SELECT date::text FROM digests
+        WHERE source = ${source} AND date < ${date}
+        ORDER BY date DESC LIMIT 1) AS previous,
+      (SELECT date::text FROM digests
+        WHERE source = ${source} AND date > ${date}
+        ORDER BY date ASC LIMIT 1) AS next
+  `
+  return rows[0] ?? { previous: null, next: null }
+}
+
+/**
+ * How many digest days are newer than this one. Deep-linking into the archive
+ * should still show you where you are in it, so the sidebar loads at least far
+ * enough back to include the date being read.
+ */
+export async function getDateRank(date: string): Promise<number> {
+  const rows = await sql<{ count: string }[]>`
+    SELECT COUNT(DISTINCT date) FROM digests WHERE date > ${date}
+  `
+  return parseInt(rows[0].count)
+}

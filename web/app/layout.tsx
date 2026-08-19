@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
-      lang="en"
+      lang="bg"
       className={`h-full ${fraunces.variable} ${literata.variable}`}
       suppressHydrationWarning
     >

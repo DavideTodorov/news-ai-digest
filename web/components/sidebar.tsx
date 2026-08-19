@@ -25,7 +25,7 @@ export function Sidebar({ initialDates, initialHasMore, currentSource, currentDa
         <div
           className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{
-            background: 'var(--accent-bg)',
+            background: 'color-mix(in oklab, var(--accent) 15%, transparent)',
             color: 'var(--accent)',
           }}
         >

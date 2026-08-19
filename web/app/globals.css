@@ -12,61 +12,57 @@ body {
     /* Dark — warm night */
     --bg: #17131f;
     --bg-grad-from: #1b1527;
-    --bg-grad-to: #14101b;
     --bg-sidebar: rgba(33, 27, 44, 0.55);
     --bg-card: #201a2b;
     --bg-hover: #2a2238;
-    --bg-active: #3a2c4e;
-    --text: #ede8e0;
+    --bg-active: #322944;
+    --text: #f0ebe3;
+    /* Reading tone: below headings, well above UI chrome. Long-form body text
+       set in --text-secondary is what made the column look washed out. */
+    --text-reading: #d8d0c6;
     --text-secondary: #a59d95;
-    --text-muted: #7a7082;
-    --border: rgba(237, 232, 224, 0.08);
-    --border-strong: rgba(237, 232, 224, 0.16);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --text-muted: #8d8497;
+    --border: rgba(240, 235, 227, 0.09);
+    --border-strong: rgba(240, 235, 227, 0.18);
     --shadow: 0 6px 24px rgba(0, 0, 0, 0.28), 0 2px 6px rgba(0, 0, 0, 0.18);
-    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.18);
     --link: #b49cff;
-    --accent: #fb7185;
-    --accent-bg: rgba(251, 113, 133, 0.14);
-    --source-mediapool: #2dd4bf;
-    --source-mediapool-bg: rgba(45, 212, 191, 0.15);
-    --source-bgonair: #fb7185;
-    --source-bgonair-bg: rgba(251, 113, 133, 0.15);
-    --source-investor: #c4b5fd;
-    --source-investor-bg: rgba(196, 181, 253, 0.14);
+
+    /* Source colours name the kind of paper you are reading: the financial
+       digest takes the salmon of the financial press, the general-news digest
+       broadsheet ink, and the retired source steps back to slate. */
+    --source-investor: #f2998a;
+    --source-mediapool: #8fb6f5;
+    --source-bgonair: #a3a8b4;
+
+    /* Set per digest by the shell to the source being read. */
+    --accent: var(--source-mediapool);
   }
 
   .light {
     /* Light — warm cream */
     --bg: #faf7f2;
-    --bg-grad-from: #fdf9f3;
-    --bg-grad-to: #f3eadc;
-    --bg-sidebar: rgba(255, 255, 255, 0.7);
+    --bg-grad-from: #fdfaf5;
+    --bg-sidebar: rgba(255, 255, 255, 0.72);
     --bg-card: #ffffff;
-    --bg-hover: #f3ede3;
-    --bg-active: #fde4cc;
-    --text: #1f1b16;
-    --text-secondary: #645a4d;
-    --text-muted: #9c9284;
-    --border: rgba(31, 27, 22, 0.08);
-    --border-strong: rgba(31, 27, 22, 0.14);
-    --shadow-sm: 0 1px 3px rgba(31, 27, 22, 0.04);
+    --bg-hover: #f1ece3;
+    --bg-active: #eae3d7;
+    --text: #1c1813;
+    --text-reading: #2e281f;
+    --text-secondary: #5d5548;
+    --text-muted: #6f6759;
+    --border: rgba(28, 24, 19, 0.1);
+    --border-strong: rgba(28, 24, 19, 0.18);
     --shadow: 0 6px 24px rgba(31, 27, 22, 0.06), 0 2px 6px rgba(31, 27, 22, 0.04);
-    --shadow-lg: 0 20px 60px rgba(31, 27, 22, 0.08), 0 4px 12px rgba(31, 27, 22, 0.05);
-    --link: #6d52e0;
-    --accent: #e85d75;
-    --accent-bg: #fce7eb;
-    --source-mediapool: #0d9488;
-    --source-mediapool-bg: #ccfbf1;
-    --source-bgonair: #ef4444;
-    --source-bgonair-bg: #fee2e2;
-    --source-investor: #8b5cf6;
-    --source-investor-bg: #ede9fe;
+    --link: #5b41c9;
+
+    --source-investor: #a8402c;
+    --source-mediapool: #2c5aa0;
+    --source-bgonair: #5c6470;
   }
 
   body {
-    /* Calm "paper" surface — a near-solid background with the faintest warmth
-       at the top, so the reading text is the most prominent thing on screen. */
+    /* A near-solid paper surface with the faintest warmth at the top, so the
+       reading text stays the most prominent thing on screen. */
     background:
       radial-gradient(ellipse 120% 50% at 50% 0%, var(--bg-grad-from), transparent 70%),
       var(--bg);
@@ -75,9 +71,274 @@ body {
   }
 }
 
-/* Prose — an edition you read, not UI text */
+/* Reader layout */
+
+.reader-layout {
+  display: block;
+}
+
+.reader {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 8rem;
+}
+
+@media (min-width: 640px) {
+  .reader {
+    padding: 3rem 2rem 8rem;
+  }
+}
+
+/* The margin has to be measured against the space left over beside the
+   sidebar, not the whole viewport, or the rail gets squeezed to a column of
+   broken words on a laptop screen. */
+.reader-scroll {
+  container-type: inline-size;
+}
+
+@container (min-width: 1160px) {
+  .reader-layout {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 680px) 1fr;
+    align-items: start;
+  }
+  .reader {
+    grid-column: 2;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* Dateline */
+
+.dateline {
+  margin-bottom: 2.75rem;
+}
+
+.dateline-weekday {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.dateline-date {
+  margin-top: 0.25rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+.dateline-year {
+  margin-left: 0.5rem;
+  font-style: normal;
+  color: var(--text-muted);
+}
+
+@media (min-width: 640px) {
+  .dateline-date {
+    font-size: 36px;
+  }
+}
+
+.dateline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin-top: 1.1rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.source-switch {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 12.5px;
+}
+
+.source-switch a,
+.source-switch span {
+  color: var(--text-muted);
+  transition: color 120ms;
+}
+
+.source-switch a:hover {
+  color: var(--text-secondary);
+}
+
+.source-switch [data-current] {
+  font-weight: 600;
+}
+
+.reading-time {
+  margin-left: auto;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* Theme rail — the digest's clusters are the day's agenda, so the index in
+   the margin is the content itself rather than a device laid over it. */
+
+.theme-rail {
+  display: none;
+  grid-column: 1;
+  position: sticky;
+  top: 0;
+  justify-self: end;
+  width: 100%;
+  max-width: 15rem;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: 5.5rem 1.75rem 3rem 1.5rem;
+}
+
+.theme-rail-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.85rem;
+}
+
+.theme-rail ol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.theme-rail a {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding: 0.3rem 0 0.3rem 0.75rem;
+  border-left: 1px solid var(--border);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  transition: color 140ms, border-color 140ms;
+}
+
+.theme-rail a:hover {
+  color: var(--text-secondary);
+  border-left-color: var(--border-strong);
+}
+
+.theme-rail a[data-active] {
+  color: var(--text);
+  border-left-color: var(--accent);
+}
+
+@container (min-width: 1160px) {
+  .theme-rail {
+    display: block;
+  }
+}
+
+/* Digest sections */
+
+.digest-section + .digest-section {
+  margin-top: 3rem;
+}
+
+/* The lede is written to stand alone for a reader who stops after it, so it is
+   the largest text in the document and the heading above it only labels. */
+.lede-eyebrow {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.9rem;
+}
+
+.digest-lede .prose p {
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+/* "Ключови теми" only names the container — the cluster headings underneath
+   say what the day was actually about, so it steps back to a marker. */
+.themes-marker {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.themes-marker span {
+  flex-shrink: 0;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.themes-marker::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-heading {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+/* Market regions arrive as a bold run-in; set them as the labels they are. */
+.digest-markets .prose p > strong:first-child {
+  display: block;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+/* The forward-look closes the edition — quieter, and set apart. */
+/* A left rule here would collide with the one blockquotes already own; the
+   forward-look is end matter, so it closes with a rule above it instead. */
+.digest-outlook {
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.digest-outlook .section-heading {
+  font-size: 15px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.digest-outlook .prose p {
+  font-size: 17px;
+  color: var(--text-secondary);
+}
+
+/* Prose */
+
 .prose {
-  --tw-prose-body: var(--text-secondary);
+  --tw-prose-body: var(--text-reading);
   --tw-prose-headings: var(--text);
   --tw-prose-bold: var(--text);
   --tw-prose-links: var(--link);
@@ -93,67 +354,269 @@ body {
   font-optical-sizing: auto;
 }
 
-/* Read better: balanced headings, tidy paragraphs.
-   Headings stay in the reading serif (full Cyrillic), weighted up. */
-.prose :is(h1, h2, h3, h4) {
-  font-family: var(--font-serif), Georgia, serif;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
-}
 .prose p,
 .prose li {
+  font-size: 18px;
+  line-height: 1.78;
   text-wrap: pretty;
 }
 
-/* Clean section headings — hierarchy through weight + space, no decoration */
-.prose h2 {
-  border-bottom: none;
-  padding-bottom: 0;
-  font-weight: 600;
-  color: var(--text);
+.prose p {
+  margin-top: 0;
+  margin-bottom: 1.15rem;
 }
 
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+/* The cluster names are the document's real headings. */
 .prose h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 21px;
   font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.3;
   color: var(--text);
+  text-wrap: balance;
+  margin-top: 2.25rem;
+  margin-bottom: 0.6rem;
+  scroll-margin-top: 1.5rem;
 }
 
-.prose a {
-  text-decoration: none;
-  border-bottom: 1px solid currentColor;
-  transition: opacity 120ms;
-}
-.prose a:hover {
-  opacity: 0.65;
+.prose h3:focus {
+  outline: none;
 }
 
-.prose blockquote {
-  font-style: italic;
-  border-left-width: 3px;
-  background: var(--bg-hover);
-  border-radius: 0 0.5rem 0.5rem 0;
-  padding: 0.9rem 1.25rem;
-}
-
-.prose hr {
-  border-top: 1px dashed var(--border-strong);
-  margin: 2.25rem 0;
-}
-
-.prose strong {
+.prose h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 24px;
   font-weight: 600;
+  letter-spacing: -0.012em;
+  color: var(--text);
+  text-wrap: balance;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose ul,
+.prose ol {
+  margin: 1rem 0;
+  padding-left: 1.2rem;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li {
+  margin: 0.35rem 0;
 }
 
 .prose ul > li::marker {
   color: var(--accent);
 }
 
-/* Sidebar link hover */
+.prose strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.prose a {
+  color: var(--link);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  transition: opacity 120ms;
+}
+
+.prose a:hover {
+  opacity: 0.65;
+}
+
+.prose blockquote {
+  font-style: italic;
+  border-left: 3px solid var(--accent);
+  background: var(--bg-hover);
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0.9rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px dashed var(--border-strong);
+  margin: 2.25rem 0;
+}
+
+.prose table {
+  width: 100%;
+  font-size: 15px;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.prose th,
+.prose td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  text-align: left;
+}
+
+/* Day navigation */
+
+.digest-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 4.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.digest-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.digest-nav-next {
+  text-align: right;
+  margin-left: auto;
+}
+
+.digest-nav-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 120ms;
+}
+
+.digest-nav-date {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 16px;
+  color: var(--text-secondary);
+  transition: color 120ms;
+}
+
+.digest-nav-link:hover .digest-nav-label {
+  color: var(--accent);
+}
+
+.digest-nav-link:hover .digest-nav-date {
+  color: var(--text);
+}
+
+/* Chrome */
+
+.reading-progress {
+  height: 1px;
+  background: var(--accent);
+  transition: width 100ms linear;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms, transform 200ms, color 120ms;
+}
+
+.back-to-top[data-visible] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+.drawer {
+  position: fixed;
+  inset-block: 0;
+  left: 0;
+  z-index: 30;
+  transform: translateX(-100%);
+  transition: transform 200ms ease-out;
+}
+
+.drawer.is-open {
+  transform: translateX(0);
+}
+
+@media (min-width: 768px) {
+  .drawer {
+    position: relative;
+    transform: none;
+  }
+}
+
+.drawer-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.drawer-close {
+  position: absolute;
+  top: 1rem;
+  right: 0.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+}
+
+.mobile-bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 3rem;
+  padding: 0 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.mobile-bar-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.source-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+}
+
 .sidebar-item:hover {
   background: var(--bg-hover);
 }
 
-/* Ghost button utility */
 .ghost {
   transition: background 120ms, color 120ms, transform 120ms;
   color: var(--text-secondary);
@@ -166,12 +629,58 @@ body {
   transform: scale(0.97);
 }
 
-/* Scrollbar — Firefox */
+/* Empty states */
+
+.empty-state {
+  max-width: 26rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.empty-state-mark {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state h1 {
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.empty-state p {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.empty-state-link {
+  margin-top: 0.75rem;
+  align-self: flex-start;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  border-bottom: 1px solid currentColor;
+}
+
+/* Scrollbars and focus */
+
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--border-strong) transparent;
 }
-/* Scrollbar — Webkit */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -191,9 +700,93 @@ body {
   border: 2px solid transparent;
 }
 
-/* Focus rings */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  border-radius: 8px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* The theme index folded into the column, for widths with no margin to spare */
+
+.theme-index {
+  margin-top: 1.1rem;
+}
+
+.theme-index summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  padding: 0.35rem 0;
+  cursor: pointer;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  list-style: none;
+}
+
+.theme-index summary::-webkit-details-marker {
+  display: none;
+}
+
+.theme-index summary::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 150ms;
+}
+
+.theme-index[open] summary::after {
+  transform: translateY(1px) rotate(225deg);
+}
+
+.theme-index-count {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  opacity: 0.75;
+}
+
+.theme-index ol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  margin-top: 0.5rem;
+  padding-bottom: 0.35rem;
+}
+
+.theme-index a {
+  display: block;
+  padding: 0.35rem 0 0.35rem 0.75rem;
+  border-left: 1px solid var(--border);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
+.theme-index a:hover {
+  color: var(--text);
+  border-left-color: var(--accent);
+}
+
+@container (min-width: 1160px) {
+  .theme-index {
+    display: none;
+  }
 }

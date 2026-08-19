@@ -5,7 +5,7 @@ import { useState } from 'react'
 import type { DigestDate } from '@/lib/db'
 import { DIGEST_PAGE_SIZE } from '@/lib/constants'
 import { formatDateShort } from '@/lib/utils'
-import { SOURCE_CONFIG, isValidSource } from '@/lib/sources'
+import { SOURCE_CONFIG, isValidSource, resolveSource } from '@/lib/sources'
 import { SidebarScrollToActive } from '@/components/sidebar-scroll-active'
 
 type Props = {
@@ -77,10 +77,14 @@ export function SidebarDateList({
           </p>
           {monthDates.map(({ date, sources }) => {
             const active = date === currentDate
+            // Sources come and go over the archive's life, so a date opens in
+            // the one being read only if it published that day.
+            const target = resolveSource(sources, currentSource)
+            if (!target) return null
             return (
               <Link
                 key={date}
-                href={`/${currentSource}/${date}`}
+                href={`/${target}/${date}`}
                 data-sidebar-active={active || undefined}
                 aria-current={active ? 'page' : undefined}
                 className="sidebar-item group flex items-center gap-2 px-3 py-[7px] rounded-lg text-[13px] transition-colors duration-100"
@@ -91,14 +95,16 @@ export function SidebarDateList({
                 }}
               >
                 <span className="tabular-nums flex-1 truncate">{formatDateShort(date)}</span>
-                <span className="flex gap-1 flex-shrink-0" aria-hidden>
+                <span className="flex gap-1 flex-shrink-0">
                   {sources.map((s) =>
                     isValidSource(s) ? (
                       <span
                         key={s}
-                        className="w-1.5 h-1.5 rounded-full"
+                        className="source-dot"
                         style={{ background: SOURCE_CONFIG[s].color }}
-                      />
+                      >
+                        <span className="sr-only">{SOURCE_CONFIG[s].label}</span>
+                      </span>
                     ) : null
                   )}
                 </span>

@@ -46,7 +46,7 @@ FEEDS = [
     {
         "name": "Mediapool",
         "url": "https://www.mediapool.bg/rss",
-        "exclude_categories": {"Анализи и Коментари"},
+        "exclude_categories": {"Анализи и Коментари", "Лайфстайл", "Автомобили"},
         # Mediapool keeps reader comments in the body block; Investor loses real
         # article text when trafilatura's comment detection is turned off.
         "extract_opts": {"favor_recall": True, "include_comments": False},

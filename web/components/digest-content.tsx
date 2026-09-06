@@ -34,8 +34,9 @@ export function DigestContent({ sections }: { sections: Section[] }) {
 }
 
 function SectionHeading({ section }: { section: Section }) {
-  // "Ключови теми" only names the container — the cluster headings underneath
-  // say what the day was actually about, so it steps back to a marker.
+  // The themes heading only names the container — the topic headings
+  // underneath say what the day was actually about, so it steps back to a
+  // marker.
   if (section.kind === 'themes') {
     return (
       <div className="themes-marker">

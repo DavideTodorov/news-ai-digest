@@ -317,6 +317,14 @@ body {
   margin-bottom: 0.3rem;
 }
 
+/* The one-line items are the day's remainder, read after the ranked topics.
+   They step down from the main sequence so the eye knows it has left it. */
+.digest-briefs .prose li {
+  font-size: 17.5px;
+  line-height: 1.68;
+  color: var(--text-secondary);
+}
+
 /* The forward-look closes the edition — quieter, and set apart. */
 /* A left rule here would collide with the one blockquotes already own; the
    forward-look is end matter, so it closes with a rule above it instead. */
@@ -325,7 +333,8 @@ body {
   border-top: 1px solid var(--border);
 }
 
-.digest-outlook .section-heading {
+.digest-outlook .section-heading,
+.digest-briefs .section-heading {
   font-size: 15px;
   font-family: var(--font-sans), system-ui, sans-serif;
   letter-spacing: 0.12em;

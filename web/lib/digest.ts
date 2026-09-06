@@ -3,13 +3,24 @@
 // different role for the reader, so each is parsed out and set differently.
 // An unrecognised heading still renders — it just gets the plain treatment.
 
-export type SectionKind = 'lede' | 'markets' | 'themes' | 'outlook' | 'plain'
+export type SectionKind =
+  | 'lede'
+  | 'markets'
+  | 'themes'
+  | 'briefs'
+  | 'outlook'
+  | 'plain'
 
 const SECTION_KINDS: Record<string, SectionKind> = {
+  Накратко: 'lede',
+  'Основни теми': 'themes',
+  'Още от деня': 'briefs',
+  'Какво предстои': 'outlook',
+  // Investor still writes these, and so do Mediapool digests archived before
+  // it moved to the ranked structure, so the older names stay mapped too.
   'Какво се случи вчера': 'lede',
   Пазари: 'markets',
   'Ключови теми': 'themes',
-  'Какво предстои': 'outlook',
 }
 
 export type Theme = {

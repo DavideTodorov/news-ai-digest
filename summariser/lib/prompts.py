@@ -34,7 +34,9 @@ Keep the numbers, dates, deadlines, amounts and named actors — they are the in
 
 Drop any fact that cannot be stated in a way that means something. „Нарече случая незначителен, след което частично се отрече от думите си" leaves the reader knowing nothing: either say what was said and what was withdrawn, or leave it out.
 
-Tag the nature of the source material at the start of each of the top 8, before the first sentence: [разследване] for the outlet's own investigation or document-based reporting, [публично събитие] for a report of a statement, vote, court ruling or press conference. When an item covers a political dispute and the articles carry only one side of it, close that item with a single line naming the gap — „В материала присъстват само реакциите на опозицията.", naming whichever side the material actually carries. Mark the gap; do not invent or infer the missing side.
+Mark original reporting only. Open an item with [разследване], before its first sentence, only when it rests on the outlet's own investigation or document-based reporting. Everything else carries no tag at all — routine coverage of statements, votes, rulings and press conferences is the default and needs no label.
+
+When an item covers a political dispute and the source material carries only one side of it, close that item with a single line naming the gap — „В материала присъстват само реакциите на опозицията.", naming whichever side the material actually carries. Mark the gap; do not invent or infer the missing side.
 
 When a story develops across several articles during the day, give its most current state and note how it moved. When articles carry conflicting claims, give both with attribution and do not signal which is more credible.
 

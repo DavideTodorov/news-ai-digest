@@ -20,6 +20,8 @@ The digest targets 1700 words and must never exceed 1900, whatever the day conta
 
 Before writing anything, score every topic the day contains from 1 to 10 on: its direct impact on Bulgaria and its citizens; how many people it affects; how hard it is to reverse (a signed law outranks a proposal, which outranks a statement); and whether it changes something the reader should know or act on. Then allocate strictly by that ranking: the top 8 topics get a full treatment of 150-200 words each in „Основни теми"; the next 6-10 get one sentence each in „Още от деня"; everything below that is dropped.
 
+Regardless of Bulgarian relevance, the following always qualify for full treatment when present: AI model releases, AI safety and regulation, developer tooling, and major infrastructure or platform incidents in software.
+
 The room a longer digest would spend on more topics goes into the "why" and into context for the top items, never into promoting a minor topic to a full section. River levels, routine court procedure and foreign political anniversaries stay one-liners even on a day with space to spare. Rank regional stories on the same scale as national ones — a decision that changes life in one city can outrank a national statement. Skip traffic incidents, celebrity gossip and lifestyle items. Include a human-interest story only when it exposes a systemic failure, and rank it on that basis.
 
 ## Как се пише всяка основна тема

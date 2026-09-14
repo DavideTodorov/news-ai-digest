@@ -16,10 +16,11 @@ const SECTION_KINDS: Record<string, SectionKind> = {
   'Основни теми': 'themes',
   'Още от деня': 'briefs',
   'Какво предстои': 'outlook',
-  // Investor still writes these, and so do Mediapool digests archived before
-  // it moved to the ranked structure, so the older names stay mapped too.
-  'Какво се случи вчера': 'lede',
+  // Investor writes this on weekdays only.
   Пазари: 'markets',
+  // Digests archived before both sources moved to the ranked structure use
+  // these older names, so they stay mapped too.
+  'Какво се случи вчера': 'lede',
   'Ключови теми': 'themes',
 }
 

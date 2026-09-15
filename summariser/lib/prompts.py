@@ -61,7 +61,7 @@ Write in Bulgarian — no English words except proper nouns and brand names. Pla
 # Weekday and weekend digests differ only in the markets section, so both are
 # built from one template. Keep literal braces out of it — it goes through format().
 _INVESTOR_MARKETS_SECTION = """# Пазари
-At most 200 words, outside the length budget above. Cover only the regions the articles report, each as its own short paragraph opened with its label:
+100-120 words, outside the length budget above. Cover only the regions the articles report, each as its own short paragraph opened with its label:
 **Азия** — key index levels and moves, and the drivers the articles state
 **Европа** — key index levels and moves, and the drivers the articles state
 **САЩ** — close or futures, the drivers the articles state, notable sector moves
@@ -76,17 +76,17 @@ The digest exists to leave the reader well-informed: not only what happened in b
 
 ## Подбор и обем
 
-„Накратко", „Основни теми", „Още от деня" and „Какво предстои" together target 1700 words and must never exceed 1900, whatever the day contains. Length stays stable day to day: a heavy news day means stricter selection, not a longer digest. When the material does not fit, drop the lowest-ranked items whole — never compress the top items to make room for minor ones.
+„Накратко", „Основни теми", „Още от деня" and „Какво предстои" together target 1400 words and must never exceed 1600, whatever the day contains. Length stays stable day to day: a heavy news day means stricter selection, not a longer digest. When the material does not fit, drop the lowest-ranked items whole — never compress the top items to make room for minor ones.
 
-Before writing anything, score every topic the day contains from 1 to 10 on: the size of the money or the market move involved, measured against what is normal for that company or market; how many investors, companies or consumers it affects; how final it is (a rate decision, a signed deal or reported results outrank guidance or a proposal, which outrank commentary); its effect on the Bulgarian economy, Bulgarian companies and local investors; and whether it changes something the reader should know or act on. Then allocate strictly by that ranking: the top 8 topics get a full treatment of 150-200 words each in „Основни теми"; the next 6-10 get one sentence each in „Още от деня"; everything below that is dropped.
+Before writing anything, score every topic the day contains from 1 to 10 on: the size of the money or the market move involved, measured against what is normal for that company or market; how many investors, companies or consumers it affects; how final it is (a rate decision, a signed deal or reported results outrank guidance or a proposal, which outrank commentary); its effect on the Bulgarian economy, Bulgarian companies and local investors; and whether it changes something the reader should know or act on. Then allocate strictly by that ranking: the top 6 topics get a full treatment of 150-200 words each in „Основни теми"; the next 6-10 get one sentence each in „Още от деня"; everything below that is dropped.
 
 Regardless of Bulgarian relevance, the following always qualify for full treatment when present: AI model releases, AI safety and regulation, developer tooling, and major infrastructure or platform incidents in software.
 
-The room a longer digest would spend on more topics goes into the "why" and into context for the top items, never into promoting a minor topic to a full section. Routine price updates, minor corporate filings and pure PR announcements stay one-liners or are dropped even on a day with space to spare. The top 8 is a ceiling, not a quota: on a light day, a topic the articles cannot support at full length goes to „Още от деня" rather than being padded.
+The room a longer digest would spend on more topics goes into the "why" and into context for the top items, never into promoting a minor topic to a full section. Routine price updates, minor corporate filings and pure PR announcements stay one-liners or are dropped even on a day with space to spare. The top 6 is a ceiling, not a quota: on a light day, a topic the articles cannot support at full length goes to „Още от деня" rather than being padded.
 
 ## Как се пише всяка основна тема
 
-Answer "why" in every one of the top 8: at least one explicit sentence covering what caused it or why it happened now, what concretely changes as a result for the company, the market, investors or consumers, and what it signals about a larger ongoing trend. Use only what the articles contain, including the mechanisms and causes they explain. If the source gives no why, write the item without it rather than inferring, speculating or filling the gap from general knowledge. A topic that can only be reported as „X обяви Y", with no available why, belongs in „Още от деня" instead.
+Answer "why" in every one of the top 6: at least one explicit sentence covering what caused it or why it happened now, what concretely changes as a result for the company, the market, investors or consumers, and what it signals about a larger ongoing trend. Use only what the articles contain, including the mechanisms and causes they explain. If the source gives no why, write the item without it rather than inferring, speculating or filling the gap from general knowledge. A topic that can only be reported as „X обяви Y", with no available why, belongs in „Още от деня" instead.
 
 Make the standing of every figure and claim explicit in the prose, so an expectation is never read as a result: прогноза, очаква се or според анализатори (a forecast, not an outcome); обяви or предложи (announced, not yet in effect or completed); отчете, прие or финализира (reported, decided, completed). „Компанията очаква приходите да растат" must never come out as „приходите растат", and an announced acquisition must never read as a closed one. This is the single most common distortion — check every item against it.
 
@@ -102,7 +102,7 @@ When a story develops across several articles during the day, give its most curr
 3-4 sentences on the day as a whole: the single most consequential development and the concrete reasons it matters, then the other threads that shaped the day. Write as if this is the only part a busy reader will see — it has to stand alone.
 
 {markets}# Основни теми
-The top 8, most important first. Give each its own `###` heading naming the specific topic („### Цени на петрола" rather than „### Енергетика"), neutral and descriptive. Under it write one paragraph of 150-200 words following the rules above. Do not repeat what „Накратко" already said — the detail, the why and the context go here.
+The top 6, most important first. Give each its own `###` heading naming the specific topic („### Цени на петрола" rather than „### Енергетика"), neutral and descriptive. Under it write one paragraph of 150-200 words following the rules above. Do not repeat what „Накратко" already said — the detail, the why and the context go here.
 
 # Още от деня
 The next 6-10 items, one sentence each, as a markdown bullet list. No `###` headings, no second sentence, no elaboration. Each line still names its companies and actors, keeps the numbers that make it mean something, and still says whether a figure is a forecast or a result and whether a deal was announced or completed.

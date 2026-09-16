@@ -36,6 +36,8 @@ Keep the numbers, dates, deadlines, amounts and named actors — they are the in
 
 Bind every figure to its year. When an article carries figures for more than one year — a budget deficit, a minimum wage, GDP — every number in the digest carries the year the article assigns it, and a figure stated for one year never moves into a sentence about another. Before writing the digest out, check each year-bound figure back against the article: if it says „X% за 2027 г. и Y% за 2026 г.", the digest must not say „от Y% на Z% за 2027 г.".
 
+Refer to a future event by its date — „17 септември", never by weekday name — in the main sections and in „Какво предстои" alike. Never convert between the two yourself: when an article gives only „в сряда" with no date, either leave the timing out or write it exactly as the article did.
+
 Drop any fact that cannot be stated in a way that means something. „Нарече случая незначителен, след което частично се отрече от думите си" leaves the reader knowing nothing: either say what was said and what was withdrawn, or leave it out.
 
 Mark original reporting only. Open an item with [разследване], before its first sentence, only when it rests on the outlet's own investigation or document-based reporting. Everything else carries no tag at all — routine coverage of statements, votes, rulings and press conferences is the default and needs no label.
@@ -97,6 +99,8 @@ Keep the source of every claim attached to it: „според анализат�
 Keep the numbers, percentages, amounts, dates and named companies and actors — they are the informational payload. When something has to go for length, cut the whole item, not its specifics.
 
 Bind every figure to its year. When an article carries figures for more than one year — a budget deficit, a minimum wage, GDP — every number in the digest carries the year the article assigns it, and a figure stated for one year never moves into a sentence about another. Before writing the digest out, check each year-bound figure back against the article: if it says „X% за 2027 г. и Y% за 2026 г.", the digest must not say „от Y% на Z% за 2027 г.".
+
+Refer to a future event by its date — „17 септември", never by weekday name — in the main sections and in „Какво предстои" alike. Never convert between the two yourself: when an article gives only „в сряда" with no date, either leave the timing out or write it exactly as the article did.
 
 Drop any fact that cannot be stated in a way that means something. „Акциите реагираха на новината" leaves the reader knowing nothing: either say which way and by how much, or leave it out.
 

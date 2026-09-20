@@ -7,6 +7,23 @@ log = logging.getLogger(__name__)
 
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
+# The request shape differs by model generation, so each source carries its own.
+# Sonnet 5 rejects temperature and runs adaptive thinking; Sonnet 4.6 accepts
+# temperature and does not think unless asked.
+MODEL_PARAMS = {
+    "mediapool": {
+        "model": "claude-sonnet-5",
+        "max_tokens": 32000,
+        "thinking": {"type": "adaptive"},
+        "output_config": {"effort": "medium"},
+    },
+    "investor": {
+        "model": "claude-sonnet-4-6",
+        "max_tokens": 8192,
+        "temperature": 0,
+    },
+}
+
 
 def build_articles_text(articles):
     lines = []
@@ -17,13 +34,16 @@ def build_articles_text(articles):
 
 
 def submit_batch(articles_text, target_date, source_name, system_prompt, article_count=0):
+    if source_name not in MODEL_PARAMS:
+        raise KeyError(f"No model config for source '{source_name}' - add one to MODEL_PARAMS")
+    model_params = MODEL_PARAMS[source_name]
+
+    log.info(f"Submitting {source_name} digest to {model_params['model']}")
     batch = client.messages.batches.create(
         requests=[{
             "custom_id": f"{source_name}-digest-{target_date}",
             "params": {
-                "model": "claude-sonnet-4-6",
-                "max_tokens": 8192,
-                "temperature": 0,
+                **model_params,
                 "system": system_prompt,
                 "messages": [{
                     "role": "user",
@@ -44,6 +64,24 @@ def poll_batch(batch_id, interval=60):
         time.sleep(interval)
 
     for result in client.messages.batches.results(batch_id):
-        if result.result.type == "succeeded":
-            return result.result.message.content[0].text
+        if result.result.type != "succeeded":
+            log.error(f"Batch request {result.custom_id} {result.result.type}: {getattr(result.result, 'error', None)}")
+            continue
+
+        message = result.result.message
+        usage = message.usage
+        log.info(f"Tokens: input={usage.input_tokens} output={usage.output_tokens}, stop_reason={message.stop_reason}")
+
+        if message.stop_reason == "max_tokens":
+            log.error("Digest hit max_tokens and is truncated - discarding.")
+            return None
+
+        # Adaptive thinking puts a thinking block first, so pick the text block
+        # by type rather than indexing into content.
+        text = next((b.text for b in message.content if b.type == "text"), None)
+        if not text:
+            log.error("No text block in the response content.")
+            return None
+        return text
+
     return None

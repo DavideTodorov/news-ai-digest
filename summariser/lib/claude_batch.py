@@ -7,9 +7,9 @@ log = logging.getLogger(__name__)
 
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-# The request shape differs by model generation, so each source carries its own.
-# Sonnet 5 rejects temperature and runs adaptive thinking; Sonnet 4.6 accepts
-# temperature and does not think unless asked.
+# Kept per-source so each digest can be tuned on its own. Both run Sonnet 5,
+# which rejects temperature/top_p/top_k and thinks adaptively; max_tokens has to
+# cover the thinking as well as a digest the Sonnet 5 tokenizer inflates.
 MODEL_PARAMS = {
     "mediapool": {
         "model": "claude-sonnet-5",
@@ -18,9 +18,10 @@ MODEL_PARAMS = {
         "output_config": {"effort": "medium"},
     },
     "investor": {
-        "model": "claude-sonnet-4-6",
-        "max_tokens": 8192,
-        "temperature": 0,
+        "model": "claude-sonnet-5",
+        "max_tokens": 32000,
+        "thinking": {"type": "adaptive"},
+        "output_config": {"effort": "medium"},
     },
 }
 

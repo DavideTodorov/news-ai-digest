@@ -7,8 +7,8 @@ Fetches Bulgarian news articles from RSS feeds, extracts full content, and gener
 | Service | Script | Schedule      | Description |
 |---------|--------|---------------|-------------|
 | RSS Fetcher | `fetcher/rss_fetcher.py` | Every 30 min  | Fetches articles from Mediapool and Investor.bg, filters out opinion pieces, extracts and cleans full content, stores in Postgres |
-| Mediapool Summariser | `summariser/mediapool.py` | Daily 2am UTC | Summarises previous day's Mediapool articles with bias-neutralising prompt (Claude Sonnet 5), posts to Discord |
-| Investor Summariser | `summariser/investor.py` | Daily 3am UTC | Summarises previous day's Investor.bg articles (Claude Sonnet 4.6), posts to Discord |
+| Mediapool Summariser | `summariser/mediapool.py` | Daily 2am UTC | Summarises previous day's Mediapool articles with bias-neutralising prompt, posts to Discord |
+| Investor Summariser | `summariser/investor.py` | Daily 3am UTC | Summarises previous day's Investor.bg articles, posts to Discord |
 
 ## Project Structure
 
@@ -35,7 +35,7 @@ news-ai-digest/
 
 - **Python 3.11+**
 - **PostgreSQL** (Railway)
-- **Claude Sonnet 5** (Mediapool) and **Claude Sonnet 4.6** (Investor.bg) via Anthropic Batch API
+- **Claude Sonnet 5** via Anthropic Batch API
 - **Discord** webhooks
 
 ## Database

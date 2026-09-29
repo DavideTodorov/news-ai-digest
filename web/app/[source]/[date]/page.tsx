@@ -90,6 +90,13 @@ export default async function DigestPage({ params }: { params: Params }) {
               {dayMonth}
               <span className="dateline-year">{year}</span>
             </h1>
+            {/* An edition drawn from several outlets names them all — the
+                source switch below only says which edition this is. */}
+            {'covers' in cfg && (
+              <p className="dateline-sources">
+                Източници: {cfg.covers.join(' и ')}
+              </p>
+            )}
 
             <div className="dateline-meta">
               <nav className="source-switch" aria-label="Източник">

@@ -33,6 +33,8 @@ body {
     --source-investor: #f2998a;
     --source-mediapool: #8fb6f5;
     --source-bgonair: #a3a8b4;
+    /* The combined edition is neither paper, so it takes neither's colour. */
+    --source-combined: #e2bd6e;
 
     /* Set per digest by the shell to the source being read. */
     --accent: var(--source-mediapool);
@@ -58,6 +60,7 @@ body {
     --source-investor: #a8402c;
     --source-mediapool: #2c5aa0;
     --source-bgonair: #5c6470;
+    --source-combined: #85600f;
   }
 
   body {
@@ -144,6 +147,12 @@ body {
   .dateline-date {
     font-size: 36px;
   }
+}
+
+.dateline-sources {
+  margin-top: 0.5rem;
+  font-size: 13px;
+  color: var(--text-secondary);
 }
 
 .dateline-meta {

@@ -9,6 +9,7 @@ Fetches Bulgarian news articles from RSS feeds, extracts full content, and gener
 | RSS Fetcher | `fetcher/rss_fetcher.py` | Every 30 min  | Fetches articles from Mediapool and Investor.bg, filters out opinion pieces, extracts and cleans full content, stores in Postgres |
 | Mediapool Summariser | `summariser/mediapool.py` | Daily 2am UTC | Summarises previous day's Mediapool articles with bias-neutralising prompt, posts to Discord |
 | Investor Summariser | `summariser/investor.py` | Daily 3am UTC | Summarises previous day's Investor.bg articles, posts to Discord |
+| Combined Summariser | `summariser/combined.py` | Daily (cron set in Railway) | Writes one edition („Общ") from the previous day's Mediapool and Investor.bg articles, posts to Discord |
 
 ## Project Structure
 
@@ -24,10 +25,12 @@ news-ai-digest/
 │   │   ├── claude_batch.py   # Batch API submit/poll
 │   │   └── discord.py        # Discord formatting and posting
 │   ├── mediapool.py
-│   └── investor.py
+│   ├── investor.py
+│   └── combined.py
 ├── Dockerfile_rss_fetcher
 ├── Dockerfile_summariser_mediapool
 ├── Dockerfile_summariser_investor
+├── Dockerfile_summariser_combined
 └── analytics.sql
 ```
 
@@ -57,6 +60,7 @@ DATABASE_URL=postgresql://user:password@host:5432/dbname
 ANTHROPIC_API_KEY=your-anthropic-api-key
 DISCORD_WEBHOOK_MEDIAPOOL=https://discord.com/api/webhooks/...
 DISCORD_WEBHOOK_INVESTOR=https://discord.com/api/webhooks/...
+DISCORD_WEBHOOK_COMBINED=https://discord.com/api/webhooks/...
 ```
 
 ## Local Setup
@@ -74,3 +78,4 @@ Each service is deployed separately on Railway using its own Dockerfile:
 - `Dockerfile_rss_fetcher`
 - `Dockerfile_summariser_mediapool`
 - `Dockerfile_summariser_investor`
+- `Dockerfile_summariser_combined`

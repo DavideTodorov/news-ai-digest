@@ -1,4 +1,11 @@
+// Order matters: a date with several digests opens in the first one listed.
 export const SOURCE_CONFIG = {
+  // One edition written from both outlets' articles.
+  combined: {
+    label: 'Общ',
+    color: 'var(--source-combined)',
+    covers: ['Mediapool', 'Investor.bg'],
+  },
   mediapool: {
     label: 'Mediapool',
     color: 'var(--source-mediapool)',

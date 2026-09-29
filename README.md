@@ -35,7 +35,7 @@ news-ai-digest/
 
 - **Python 3.11+**
 - **PostgreSQL** (Railway)
-- **Claude Sonnet 5** via Anthropic Batch API
+- **Claude Opus 5.5** (low effort) via Anthropic Batch API
 - **Discord** webhooks
 
 ## Database

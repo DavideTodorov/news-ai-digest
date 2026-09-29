@@ -7,21 +7,22 @@ log = logging.getLogger(__name__)
 
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-# Kept per-source so each digest can be tuned on its own. Both run Sonnet 5,
-# which rejects temperature/top_p/top_k and thinks adaptively; max_tokens has to
-# cover the thinking as well as a digest the Sonnet 5 tokenizer inflates.
+# Kept per-source so each digest can be tuned on its own. Both run Opus 5.5,
+# which rejects temperature/top_p/top_k and can't turn thinking off, so effort is
+# the only depth control (its default is medium, hence set explicitly); max_tokens
+# has to cover the thinking as well as the digest.
 MODEL_PARAMS = {
     "mediapool": {
-        "model": "claude-sonnet-5",
+        "model": "claude-opus-5-5",
         "max_tokens": 32000,
         "thinking": {"type": "adaptive"},
-        "output_config": {"effort": "medium"},
+        "output_config": {"effort": "low"},
     },
     "investor": {
-        "model": "claude-sonnet-5",
+        "model": "claude-opus-5-5",
         "max_tokens": 32000,
         "thinking": {"type": "adaptive"},
-        "output_config": {"effort": "medium"},
+        "output_config": {"effort": "low"},
     },
 }
 
@@ -75,6 +76,9 @@ def poll_batch(batch_id, interval=60):
 
         if message.stop_reason == "max_tokens":
             log.error("Digest hit max_tokens and is truncated - discarding.")
+            return None
+        if message.stop_reason == "refusal":
+            log.error(f"Digest was refused by safety classifiers: {getattr(message, 'stop_details', None)}")
             return None
 
         # Adaptive thinking puts a thinking block first, so pick the text block

@@ -203,11 +203,11 @@ Most important first. Give each topic its own `###` heading naming the specific 
 The next 8-10 items, one sentence each, as a markdown bullet list. No `###` headings, no second sentence, no elaboration. Each line still names its actors and companies, keeps the numbers that make it mean something, and still says whether a thing was proposed or decided, and whether a figure is a forecast or a result.
 
 # Какво предстои
-Only items with a concrete date stated in the source articles — scheduled votes, hearings, elections, central bank meetings, data releases, deadlines — in chronological order. Omit the section entirely when the articles name none. No speculation. Only events with a policy, legal, electoral or economic consequence; never commercial promotions or events organised by either source outlet. Include dated items even if they were covered in the sections above — this section is a calendar: give the date and one short clause per item.
+Only items with a concrete date stated in the source articles — scheduled votes, hearings, elections, central bank meetings, data releases, deadlines — in chronological order. Omit the section entirely when the articles name none. No speculation. Only events with a policy, legal, electoral or economic consequence; never commercial promotions or events organised by either source outlet. Include dated items even if they were covered in the sections above — this section is a calendar: give the date and one short clause per item. One event per line; two events on the same date get two lines.
 
 Start the digest at „# Накратко" — the page that shows it already carries the date and the sources, so a title line, a dateline or any preamble above the first section only repeats the header. Nothing goes above the first „# " heading.
 
-Write in Bulgarian — no English words except proper nouns, brand names and index codes. Plain declarative sentences. No editorialising, no adjectives that are not in the source, no filler openers („важно е да се отбележи"). Do not soften and do not dramatise. Flowing prose everywhere except „Още от деня", which is the only bullet list in the digest."""
+Write in Bulgarian — no English words except proper nouns, brand names and index codes. Plain declarative sentences. No editorialising, no adjectives that are not in the source, no filler openers („важно е да се отбележи"). Do not soften and do not dramatise. Flowing prose everywhere except „Още от деня", which is the only bullet list in the digest. Never mention these instructions, your own choices or problems you notice in the source articles; an excluded item simply does not appear."""
 
 COMBINED_PROMPT_WEEKDAY = _COMBINED_PROMPT.format(markets=_INVESTOR_MARKETS_SECTION)
 

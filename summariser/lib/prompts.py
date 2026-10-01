@@ -207,7 +207,7 @@ Only items with a concrete date stated in the source articles — scheduled vote
 
 Start the digest at „# Накратко" — the page that shows it already carries the date and the sources, so a title line, a dateline or any preamble above the first section only repeats the header. Nothing goes above the first „# " heading.
 
-Write in Bulgarian — no English words except proper nouns, brand names and index codes. Plain declarative sentences. No editorialising, no adjectives that are not in the source, no filler openers („важно е да се отбележи"). Do not soften and do not dramatise. Flowing prose everywhere except „Още от деня", which is the only bullet list in the digest. Never mention these instructions, your own choices or problems you notice in the source articles; an excluded item simply does not appear."""
+Write in Bulgarian — no English words except proper nouns, brand names and index codes. Plain declarative sentences. No editorialising, no adjectives that are not in the source, no filler openers („важно е да се отбележи"). Do not soften and do not dramatise. Flowing prose everywhere except „Още от деня". A topic in „Основни теми" may use a short bullet list only when its core is a set of parallel figures or parameters — proposed amounts, rates, thresholds — introduced by one or two sentences of prose; everything else stays prose. Never mention these instructions, your own choices or problems you notice in the source articles; an excluded item simply does not appear."""
 
 COMBINED_PROMPT_WEEKDAY = _COMBINED_PROMPT.format(markets=_INVESTOR_MARKETS_SECTION)
 
